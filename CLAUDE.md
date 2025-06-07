@@ -118,3 +118,116 @@ project-root/
 - Integration points
 - Performance considerations
 - Security requirements
+
+## Boxiii Development Plan
+
+### Current Status (2025-01-07)
+- Viewer: ✅ Running successfully with existing content
+- Builder: 🔄 Needs migration from Gradio to React frontend
+
+### Phase 1: Builder Frontend Development
+
+#### TODO List:
+1. **Initialize React App for Builder Frontend**
+   - [ ] Create React app with TypeScript in builder/frontend
+   - [ ] Set up Tailwind CSS
+   - [ ] Configure proxy for Python backend API
+   - [ ] Set up routing with React Router
+
+2. **Core UI Components**
+   - [ ] Create authentication/login page
+   - [ ] Build dashboard with navigation sidebar
+   - [ ] Implement creator management interface (CRUD)
+   - [ ] Design content generation form with:
+     - [ ] LLM provider selection (Gemini, Claude, GPT-4)
+     - [ ] Topic/prompt input fields
+     - [ ] Generation parameters/settings
+     - [ ] Cost estimation display
+   - [ ] Create content preview/editor component
+   - [ ] Build export management interface
+
+3. **Backend API Migration**
+   - [ ] Convert Gradio app to FastAPI endpoints
+   - [ ] Implement proper CORS configuration
+   - [ ] Create API endpoints:
+     - [ ] POST /api/auth/login
+     - [ ] GET/POST/PUT/DELETE /api/creators
+     - [ ] POST /api/generate/content
+     - [ ] POST /api/export
+     - [ ] GET /api/stats
+   - [ ] Add request validation with Pydantic
+   - [ ] Implement JWT authentication
+
+4. **Data Format Updates (per MIGRATION_GUIDE.md)**
+   - [ ] Update core_models.py with new schema
+   - [ ] Implement clean ID generation
+   - [ ] Add set_number sequential generation
+   - [ ] Include Portuguese tags (tags_pt)
+   - [ ] Generate category-based color schemes
+   - [ ] Add hero content flagging
+   - [ ] Include stats tracking
+
+5. **Integration Testing**
+   - [ ] Test content generation with each LLM provider
+   - [ ] Verify export format matches viewer expectations
+   - [ ] Test full flow: Create → Generate → Export → View
+   - [ ] Validate against JSON schemas
+
+### Phase 2: Alpha Production Preparation
+
+#### Deployment Considerations:
+- **Platform**: Cloudflare Pages/Workers
+- **Backend**: Consider Cloudflare Workers for API
+- **Database**: Start with D1 (Cloudflare's SQLite) or MongoDB Atlas
+- **CDN**: Cloudflare for static assets
+
+#### Authentication & User Management:
+- [ ] Implement user registration/login
+- [ ] User profile management
+- [ ] Session management with JWT
+- [ ] Password reset functionality
+- [ ] Consider Auth0 or Clerk for managed auth
+
+#### Payment Gateway Integration:
+- [ ] Stripe integration for international payments
+- [ ] PayPal as secondary option
+- [ ] Mercado Pago for Latin American markets
+- [ ] Subscription management
+- [ ] Usage-based billing for AI generation
+
+### Phase 3: Production Features
+
+- [ ] Analytics dashboard
+- [ ] Multi-language support (PT/EN/ES)
+- [ ] Team collaboration features
+- [ ] API rate limiting
+- [ ] Backup and restore functionality
+- [ ] Admin panel for platform management
+
+### Technical Debt & Improvements
+
+- [ ] Add comprehensive error handling
+- [ ] Implement logging system
+- [ ] Add monitoring (Sentry, DataDog)
+- [ ] Performance optimization
+- [ ] Security audit
+- [ ] Documentation updates
+
+### Environment Variables Needed
+
+```bash
+# Builder Backend
+JWT_SECRET=
+GEMINI_API_KEY=
+CLAUDE_API_KEY=
+OPENAI_API_KEY=
+
+# Future Production
+STRIPE_API_KEY=
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+MERCADOPAGO_ACCESS_TOKEN=
+MONGODB_URI=
+CLOUDFLARE_ACCOUNT_ID=
+CLOUDFLARE_API_TOKEN=
+```

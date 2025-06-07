@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Boxiii API Test</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .endpoint { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        .result { background: #f5f5f5; padding: 10px; margin: 10px 0; white-space: pre-wrap; }
+        button { padding: 10px; margin: 5px; background: #007cba; color: white; border: none; cursor: pointer; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+    </style>
+</head>
+<body>
+    <h1>Boxiii Builder API Test</h1>
+    
+    <div class="endpoint">
+        <h3>API Health Check</h3>
+        <button onclick="testHealth()">Test Health</button>
+        <div id="health-result" class="result"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>List Creators</h3>
+        <button onclick="testCreators()">List Creators</button>
+        <div id="creators-result" class="result"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>List Cards (First 3)</h3>
+        <button onclick="testCards()">List Cards</button>
+        <div id="cards-result" class="result"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>Data Summary</h3>
+        <button onclick="testSummary()">Get Summary</button>
+        <div id="summary-result" class="result"></div>
+    </div>
+
+    <div class="endpoint">
+        <h3>Export All Data</h3>
+        <button onclick="exportData()">Export to JSON</button>
+        <div id="export-result" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5001/api';
+
+        async function makeRequest(url, method = 'GET') {
+            try {
+                const response = await fetch(url, { method });
+                const data = await response.json();
+                return { success: true, data };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function testHealth() {
+            const result = await makeRequest(`${API_BASE}/health`);
+            const div = document.getElementById('health-result');
+            if (result.success) {
+                div.className = 'result success';
+                div.textContent = `✅ API Healthy at ${result.data.timestamp}`;
+            } else {
+                div.className = 'result error';
+                div.textContent = `❌ Error: ${result.error}`;
+            }
+        }
+
+        async function testCreators() {
+            const result = await makeRequest(`${API_BASE}/creators`);
+            const div = document.getElementById('creators-result');
+            if (result.success) {
+                div.className = 'result success';
+                div.textContent = `✅ Found ${result.data.count} creators:\n\n${JSON.stringify(result.data.data, null, 2)}`;
+            } else {
+                div.className = 'result error';
+                div.textContent = `❌ Error: ${result.error}`;
+            }
+        }
+
+        async function testCards() {
+            const result = await makeRequest(`${API_BASE}/cards?limit=3`);
+            const div = document.getElementById('cards-result');
+            if (result.success) {
+                div.className = 'result success';
+                const cards = result.data.data.map(card => ({
+                    id: card.card_id,
+                    title: card.title,
+                    creator: card.creator_id
+                }));
+                div.textContent = `✅ Found ${result.data.count} cards (showing first 3):\n\n${JSON.stringify(cards, null, 2)}`;
+            } else {
+                div.className = 'result error';
+                div.textContent = `❌ Error: ${result.error}`;
+            }
+        }
+
+        async function testSummary() {
+            const result = await makeRequest(`${API_BASE}/debug/data-summary`);
+            const div = document.getElementById('summary-result');
+            if (result.success) {
+                div.className = 'result success';
+                div.textContent = `✅ Data Summary:\n\n${JSON.stringify(result.data, null, 2)}`;
+            } else {
+                div.className = 'result error';
+                div.textContent = `❌ Error: ${result.error}`;
+            }
+        }
+
+        async function exportData() {
+            const result = await makeRequest(`${API_BASE}/export`, 'POST');
+            const div = document.getElementById('export-result');
+            if (result.success) {
+                div.className = 'result success';
+                div.textContent = `✅ Export Success:\n\n${JSON.stringify(result.data, null, 2)}`;
+            } else {
+                div.className = 'result error';
+                div.textContent = `❌ Error: ${result.error}`;
+            }
+        }
+
+        // Auto-test health on load
+        window.onload = () => {
+            testHealth();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+GITHUB TOKEN QUICK SETUP
+========================
+
+FASTEST METHOD - Using GitHub CLI:
+----------------------------------
+1. Run: gh auth login
+2. Choose: GitHub.com
+3. Choose: HTTPS  
+4. Choose: Paste an authentication token
+5. Go to: https://github.com/settings/tokens
+6. Create token with scopes: repo, read:org, gist
+7. Paste token when prompted
+
+VERIFY:
+-------
+gh auth status
+gh repo list --limit 5
+
+ALTERNATIVE - Add to ~/.bashrc:
+-------------------------------
+echo 'export GITHUB_TOKEN="ghp_YOUR_TOKEN_HERE"' >> ~/.bashrc
+source ~/.bashrc
+
+TROUBLESHOOTING:
+----------------
+- Token not working? Check expiration and scopes
+- Already logged in? Run: gh auth logout first
+- Need to switch accounts? Use: gh auth switch
+
+The GitHub CLI method stores tokens in ~/.config/gh/hosts.yml
+and persists across all Claude Code sessions.

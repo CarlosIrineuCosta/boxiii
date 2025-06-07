@@ -1,0 +1,11 @@
+{
+  "export_timestamp": "2025-06-07T05:21:39.672837",
+  "total_creators": 2,
+  "total_cards": 13,
+  "total_sets": 3,
+  "data_interfaces": {
+    "creators": "JSONCreatorData",
+    "cards": "JSONContentData",
+    "sets": "JSONContentSetData"
+  }
+}
