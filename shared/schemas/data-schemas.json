@@ -1,0 +1,405 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Creator": {
+      "type": "object",
+      "required": [
+        "creator_id",
+        "display_name",
+        "platform",
+        "platform_handle",
+        "avatar_url",
+        "banner_url",
+        "description",
+        "categories",
+        "follower_count",
+        "verified",
+        "social_links",
+        "expertise_areas",
+        "content_style",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "creator_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$",
+          "description": "Clean lowercase ID with underscores (e.g., 'ana_contti')"
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["instagram", "youtube", "tiktok", "multi", "other"]
+        },
+        "platform_handle": {
+          "type": "string",
+          "pattern": "^@?[a-zA-Z0-9_.]+$"
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "banner_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "wellness", "health_fitness", "nutrition", "science_tech",
+              "history_culture", "arts_creativity", "business_finance",
+              "personal_development", "education_learning", "environment_sustainability",
+              "travel_geography", "sports_recreation", "cooking_culinary",
+              "parenting_family", "spirituality_philosophy"
+            ]
+          }
+        },
+        "follower_count": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "social_links": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "expertise_areas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "content_style": {
+          "type": "string",
+          "enum": ["educational", "story_driven", "tutorial", "inspirational", "analytical"]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "ContentSet": {
+      "type": "object",
+      "required": [
+        "set_id",
+        "set_number",
+        "creator_id",
+        "title",
+        "description",
+        "category",
+        "thumbnail_url",
+        "banner_url",
+        "card_count",
+        "estimated_time_minutes",
+        "difficulty_level",
+        "target_audience",
+        "supported_navigation",
+        "content_style",
+        "tags",
+        "tags_pt",
+        "is_hero",
+        "prerequisites",
+        "learning_outcomes",
+        "color_scheme",
+        "stats",
+        "status",
+        "language",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "set_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "set_number": {
+          "type": "string",
+          "pattern": "^s[0-9]{3}$",
+          "description": "Display reference (e.g., 's001', 's002')"
+        },
+        "creator_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "wellness", "health_fitness", "nutrition", "science_tech",
+            "history_culture", "arts_creativity", "business_finance",
+            "personal_development", "education_learning", "environment_sustainability",
+            "travel_geography", "sports_recreation", "cooking_culinary",
+            "parenting_family", "spirituality_philosophy"
+          ]
+        },
+        "thumbnail_url": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "banner_url": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "card_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "estimated_time_minutes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "difficulty_level": {
+          "type": "string",
+          "enum": ["beginner", "intermediate", "advanced"]
+        },
+        "target_audience": {
+          "type": "string"
+        },
+        "supported_navigation": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["timeline", "thematic", "difficulty", "random"]
+          }
+        },
+        "content_style": {
+          "type": "string",
+          "enum": ["question_first", "fact_first", "story_driven", "practical_guide"]
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags_pt": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Portuguese display tags for UI"
+        },
+        "is_hero": {
+          "type": "boolean",
+          "description": "Whether this content set should be featured"
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "learning_outcomes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "color_scheme": {
+          "type": "object",
+          "required": ["primary", "secondary", "accent"],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "secondary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          }
+        },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "views": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "completion_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "published", "archived"]
+        },
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2}-[A-Z]{2}$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Card": {
+      "type": "object",
+      "required": [
+        "card_id",
+        "card_number",
+        "set_id",
+        "creator_id",
+        "title",
+        "summary",
+        "detailed_content",
+        "order_index",
+        "navigation_contexts",
+        "media",
+        "domain_data",
+        "tags",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "card_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "card_number": {
+          "type": "string",
+          "pattern": "^c[0-9]{3}$",
+          "description": "Display reference (e.g., 'c001', 'c002')"
+        },
+        "set_id": {
+          "type": "string"
+        },
+        "creator_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "detailed_content": {
+          "type": "string"
+        },
+        "order_index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "navigation_contexts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "integer"
+              },
+              "total_items": {
+                "type": "integer"
+              },
+              "context_data": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "media": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["media_type", "url"],
+            "properties": {
+              "media_type": {
+                "type": "string",
+                "enum": ["image", "video", "audio", "document"]
+              },
+              "url": {
+                "type": "string",
+                "format": "uri-reference"
+              },
+              "alt_text": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "license": {
+                "type": "string"
+              },
+              "validation_status": {
+                "type": "string",
+                "enum": ["pending", "verified", "failed"]
+              },
+              "last_checked": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        "domain_data": {
+          "type": "object",
+          "properties": {
+            "related_concepts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

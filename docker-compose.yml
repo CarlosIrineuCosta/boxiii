@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  builder-backend:
+    build: 
+      context: ./builder
+      dockerfile: Dockerfile
+    container_name: boxiii-builder-backend
+    ports:
+      - "8001:8000"
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - ./builder/data:/app/data
+    networks:
+      - boxiii-network
+
+  builder-frontend:
+    build: 
+      context: ./builder/frontend
+      dockerfile: Dockerfile
+    container_name: boxiii-builder-frontend
+    ports:
+      - "3001:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8001
+    depends_on:
+      - builder-backend
+    networks:
+      - boxiii-network
+
+  viewer:
+    build: 
+      context: ./viewer
+      dockerfile: Dockerfile
+    container_name: boxiii-viewer
+    ports:
+      - "3000:80"
+    volumes:
+      - ./viewer/public/data:/usr/share/nginx/html/data
+    networks:
+      - boxiii-network
+
+networks:
+  boxiii-network:
+    driver: bridge
