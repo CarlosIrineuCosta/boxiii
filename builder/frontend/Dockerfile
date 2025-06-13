@@ -1,4 +1,4 @@
-# Development Dockerfile for Builder Frontend with hot reloading
+# Dockerfile for Builder Frontend Admin Interface
 FROM node:18-alpine
 
 WORKDIR /app
@@ -15,5 +15,5 @@ COPY . .
 # Expose Vite dev server port
 EXPOSE 3000
 
-# Start development server
+# Start admin server
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]

@@ -52,13 +52,13 @@ services:
   builder-frontend:
     build: 
       context: ./builder/frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: boxiii-builder-frontend
     restart: always
     ports:
       - "3001:3000"
     environment:
-      - VITE_API_URL=http://localhost:5001/api
+      - VITE_API_URL=/api
     volumes:
       - ./builder/frontend:/app
       - /app/node_modules
