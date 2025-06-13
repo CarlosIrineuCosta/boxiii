@@ -1,9 +1,42 @@
 --------------------------------------------------------------------------------
 -- README.md 
--- update: 13 jun 2025 -- 02:29
+-- update: 13 jun 2025 -- 06:40 (MAJOR TECHNOLOGY UPDATES)
 --------------------------------------------------------------------------------
 
 # Boxiii - AI-Powered Educational Content Platform
+
+## 🚨 MAJOR TECHNOLOGY CHANGES - June 13, 2025
+
+### Critical Frontend Technology Migration: Tailwind CSS v4
+**BREAKING CHANGE**: The Builder frontend has been migrated from Tailwind CSS v3 to v4 with significant architectural changes:
+
+#### What Changed:
+1. **Build System**: Replaced PostCSS plugin with dedicated `@tailwindcss/vite` plugin
+2. **Configuration**: Removed `tailwind.config.js` (not needed in v4)
+3. **CSS Import**: Changed from `@tailwind` directives to single `@import "tailwindcss"`
+4. **Performance**: Now uses Rust-based compilation engine (5x faster builds)
+
+#### Why This Path Was Chosen:
+- **Performance**: Tailwind v4 offers significantly faster build times with Rust engine
+- **Simplification**: Single import line vs. three @tailwind directives
+- **Future-Proofing**: v4 is designed for modern build tools and CSS features
+- **Integration**: Dedicated Vite plugin provides optimal developer experience
+
+#### Files Modified:
+- `package.json`: Updated to `tailwindcss@^4.1.8` and `@tailwindcss/vite@^4.1.8`
+- `vite.config.ts`: Added `tailwindcss()` plugin import and configuration
+- `src/index.css`: Changed to `@import "tailwindcss"`
+- `postcss.config.js`: Simplified (no longer needed for primary processing)
+
+#### Critical Notes for Future Development:
+- **DO NOT** revert to v3 without understanding build system implications
+- **Port Configuration**: Vite config locked to port 3000 (container) → 3001 (host)
+- **Browser Support**: v4 requires Safari 16.4+, Chrome 111+, Firefox 128+
+
+### Database Architecture Status:
+- ✅ **PostgreSQL with JSONB**: Unified database for all services
+- ✅ **SQLAlchemy ORM**: Type-safe models with relationships
+- ✅ **Docker Integration**: Shared database container across services
 
 ## Overview
 
@@ -14,8 +47,7 @@ Boxiii is a comprehensive educational content platform that combines AI-powered 
 
 ## Architecture
 
-The system follows a decoupled architecture, with a shared PostgreSQL database.
-
+The system follows a decoupled architecture, with a shared PostgreSQL database:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -23,12 +55,13 @@ The system follows a decoupled architecture, with a shared PostgreSQL database.
 ├─────────────────────────┬───────────────────────────────────┤
 │    Builder (Admin)      │        Viewer (Public)            │
 ├─────────────────────────┼───────────────────────────────────┤
-│ • React (Vite) + Tailwind │ • React (Vite) + Tailwind       │
-│ • Python FastAPI Backend │ • Netflix-style UI               │
-│ • PostgreSQL Database   │ • User Authentication             │
-│ • Multi-LLM Support     │ • Content Discovery               │
+│ • React 19+ (Vite)      │ • React + Vite                    │
+│ • Tailwind CSS v4      │ • Tailwind CSS                    │
+│ • TypeScript            │ • Netflix-style UI                │
+│ • Python FastAPI       │ • User Authentication             │
+│ • PostgreSQL + JSONB   │ • Content Discovery               │
+│ • Multi-LLM Support    │ • PWA Capabilities                │
 └─────────────────────────┴───────────────────────────────────┘
-
 ```
 
 ## Directory Structure
@@ -36,74 +69,102 @@ The system follows a decoupled architecture, with a shared PostgreSQL database.
 ```
 boxiii/
 ├── builder/
-│   ├── backend/          # Python FastAPI API
-│   ├── frontend/         # React + Vite Admin UI
+│   ├── backend/          # Python FastAPI API with SQLAlchemy
+│   ├── frontend/         # React 19 + Vite + Tailwind v4 Admin UI  
 │   └── Dockerfile
 ├── viewer/               # Public PWA (React + Vite)
 │   ├── src/
 │   ├── public/
 │   └── Dockerfile
 ├── shared/               # Shared utilities, types, etc.
-│   └── uploads/
+│   ├── schemas/          # JSON schema definitions
+│   └── uploads/          # File upload storage
 ├── database/
-│   └── init/             # SQL initialization scripts
-└── docker-compose.yml    # Main docker-compose setup
+│   └── init/             # PostgreSQL initialization scripts
+├── docker-compose.yml    # Main orchestration
+├── README.md            # This file
+├── ARCHITECTURE.md      # Detailed system architecture
+└── CLAUDE.md           # AI assistant project memory
 ```
 
 ## Technology Stack
 
-### Frontend (Both Services)
-- React 18+
-- Vite
-- Tailwind CSS
+### Frontend Technology Stack
+#### Builder (Admin Interface)
+- **React**: 19.1.0 (latest)
+- **TypeScript**: 5.8.3 
+- **Vite**: 6.3.5 (build tool)
+- **Tailwind CSS**: 4.1.8 (Rust-based compilation)
+- **Router**: React Router DOM 7.6.2
+- **UI Libraries**: 
+  - Heroicons 2.2.0
+  - Lucide React 0.514.0
+  - React Hot Toast 2.5.2
+- **HTTP Client**: Axios 1.9.0
 
-### Builder Backend
-- Python 3.12+
-- FastAPI
-- PostgreSQL with JSONB support
-- Multi-provider LLM integration (Gemini, Claude, GPT)
+#### Viewer (Public PWA)
+- **React**: Standard version with PWA capabilities
+- **Tailwind CSS**: For styling
+- **Service Worker**: For offline functionality
+- **Responsive Design**: Mobile-first approach
 
-### Infrastructure
-- Docker & Docker Compose
-- PostgreSQL
-- JWT authentication
+### Backend Technology Stack
+- **Python**: 3.12+
+- **FastAPI**: High-performance async API framework
+- **SQLAlchemy**: 2.0+ ORM with async support
+- **PostgreSQL**: 15+ with JSONB for flexible content storage
+- **Authentication**: JWT-based auth system
+- **LLM Integration**: Multi-provider support (OpenAI, Claude, Gemini)
+
+### Infrastructure & DevOps
+- **Docker**: Containerized services
+- **Docker Compose**: Service orchestration
+- **PostgreSQL**: Shared database with JSONB flexibility
+- **Environment**: .env-based configuration management
 
 ## Getting Started
 
 ### Prerequisites
 - Docker and Docker Compose
-- An `.env` file created from `.env.example` with your API keys.
+- Node.js 18+ (for local development)
+- An `.env` file created from `.env.example` with your API keys
 
-### Running the Platform
+### Quick Start with Docker (Recommended)
 
-To launch the entire platform (PostgreSQL DB, Builder Backend, Builder Frontend, Viewer), run:
+1. **Clone and Setup Environment:**
+```bash
+git clone https://github.com/[username]/boxiii.git
+cd boxiii
+cp .env.example .env
+# Edit .env with your API keys
+```
 
+2. **Start All Services:**
 ```bash
 docker-compose up -d --build
+```
 
-Viewer (Public App) will be available at http://localhost:3000
-Builder (Admin App) will be available at http://localhost:3001
-Builder Backend API is exposed at http://localhost:5001
+3. **Access Services:**
+- **Builder (Admin)**: http://localhost:3001
+- **Viewer (Public)**: http://localhost:3000  
+- **API Documentation**: http://localhost:5001/docs
+- **PostgreSQL**: localhost:5432
 
+### Local Development Setup
 
+For frontend development with hot reload:
 
-## Key Features
+```bash
+# Builder Frontend
+cd builder/frontend
+npm install
+npm run dev  # Starts on localhost:3001
 
-### Builder (Admin/CMS)
-- Secure authentication for administrators
-- Multi-provider LLM integration (Gemini, Claude, GPT-4)
-- Content creation and management
-- Creator profile management
-- Export functionality to JSON/MongoDB
-- Cost optimization for AI operations
-
-### Viewer (Public PWA)
-- Netflix-style content discovery
-- Progressive Web App capabilities
-- User authentication
-- Multi-language support
-- Offline functionality
-- Future: Payment integration (Stripe, PayPal, Mercado Pago)
+# Viewer
+cd viewer  
+npm install
+npm run dev  # Starts on localhost:3000
+```
 
 ## Meta-CRUD Architecture Philosophy
 

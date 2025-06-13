@@ -1,3 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind CSS v4 - Single import replaces the three @tailwind directives */
+/* This works with the @tailwindcss/vite plugin for optimal performance */
+@import "tailwindcss";
