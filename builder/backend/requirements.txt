@@ -5,6 +5,11 @@
 fastapi>=0.104.1
 uvicorn[standard]>=0.24.0
 
+# Database
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+alembic>=1.13.0
+
 # LLM Providers
 anthropic>=0.8.0
 openai>=1.52.0
@@ -22,6 +27,7 @@ asyncio-mqtt>=0.13.0
 Pillow>=10.4.0
 requests>=2.32.0
 
-# Legacy (remove when fully migrated)
-gradio>=4.44.1
-Flask>=3.0.0
+# Authentication
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.5

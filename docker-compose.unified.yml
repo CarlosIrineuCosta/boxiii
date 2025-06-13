@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  # Shared PostgreSQL Database with JSONB support
+  postgres:
+    image: postgres:15-alpine
+    container_name: boxiii-db
+    restart: always
+    environment:
+      POSTGRES_DB: boxiii
+      POSTGRES_USER: boxiii_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-boxiii_dev_password}
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - boxiii-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U boxiii_user -d boxiii"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Builder Backend API (existing Python FastAPI)
+  builder-backend:
+    build: 
+      context: ./builder
+      dockerfile: Dockerfile
+    container_name: boxiii-builder-backend
+    restart: always
+    ports:
+      - "5001:5000"
+    environment:
+      - DATABASE_URL=postgresql://boxiii_user:${DB_PASSWORD:-boxiii_dev_password}@postgres:5432/boxiii
+      - JWT_SECRET=${JWT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - ./builder/backend:/app
+      - ./shared/uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - boxiii-network
+
+  # Builder Frontend (React PWA for Admin)
+  builder-frontend:
+    build: 
+      context: ./builder/frontend
+      dockerfile: Dockerfile.dev
+    container_name: boxiii-builder-frontend
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      - VITE_API_URL=http://localhost:5001/api
+    volumes:
+      - ./builder/frontend:/app
+      - /app/node_modules
+    depends_on:
+      - builder-backend
+    networks:
+      - boxiii-network
+
+  # Viewer Frontend (React PWA for Public)
+  viewer:
+    build: 
+      context: ./viewer
+      dockerfile: Dockerfile.dev
+    container_name: boxiii-viewer
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:5001/api/public
+    volumes:
+      - ./viewer:/app
+      - /app/node_modules
+    depends_on:
+      - builder-backend
+    networks:
+      - boxiii-network
+
+volumes:
+  postgres_data:
+
+networks:
+  boxiii-network:
+    driver: bridge

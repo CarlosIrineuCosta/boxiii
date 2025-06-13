@@ -76,15 +76,14 @@ Boxiii implements a sophisticated data abstraction system that enables:
 ### Current Data Flow
 
 ```
-React Frontend ↔ FastAPI (Port 5001) ↔ Data Abstraction Layer ↔ JSON Files
-                                     ↓
-                              Export/Import ↔ Viewer (Port 3000)
+Builder Frontend ↔ Builder API ↔ PostgreSQL Database ↔ Viewer Frontend
+   (Port 3001)      (Port 5001)     (Port 5432)        (Port 3000)
 ```
 
-**Phase 1 (Complete)**: JSON backend with API abstraction
-**Phase 2 (Planned)**: Dynamic UI generation from schema  
-**Phase 3 (Planned)**: AI field behaviors and multi-platform publishing
-**Phase 4 (Future)**: Vector DB backend for semantic content operations
+**Phase 1 (Complete)**: PostgreSQL backend with JSONB flexibility
+**Phase 2 (Current)**: Creator Management CRUD interface
+**Phase 3 (Planned)**: Content Generation with AI integration
+**Phase 4 (Future)**: Advanced features (analytics, payments, multi-language)
 
 ### Development Safety
 - **Always-Available JSON Export**: Every operation can export to JSON for Obsidian viewing
@@ -98,73 +97,88 @@ React Frontend ↔ FastAPI (Port 5001) ↔ Data Abstraction Layer ↔ JSON Files
 - Tailwind CSS
 - TypeScript
 - React Router DOM
+- React Hot Toast for notifications
 
 ### Builder Backend
 - Python 3.12+
 - FastAPI with data abstraction layer
+- **Database**: PostgreSQL with JSONB for flexible content storage
+- **ORM**: SQLAlchemy 2.0+ with async support
 - Multi-provider LLM integration (Claude, Gemini, GPT-4)
 - **Meta-CRUD System**: Data interface contracts for flexible backend swapping
-- JSON/MongoDB/Vector DB support through abstraction layer
+
+### Database Architecture
+- **PostgreSQL with JSONB**: Hybrid approach for stable core fields + flexible content
+- **Core Tables**: creators, content_sets, content_cards
+- **Flexible Fields**: domain_data, media, navigation_contexts as JSONB
+- **Indexes**: GIN indexes on JSONB columns for fast queries
+- **Migrations**: Alembic for schema versioning
 
 ### Infrastructure
-- Docker containers
+- Docker containers with shared PostgreSQL database
 - Environment-based configuration
 - JWT authentication
 - HTTPS/TLS
 
-## Current System Status (Phase 1 Complete)
+## Current System Status (Phase 2 - Creator Management)
 
-### ✅ Builder Backend API (Port 5001)
-The Builder now implements a **meta-CRUD architecture** with data abstraction:
+### ✅ Unified Architecture with PostgreSQL
+The system now uses a **shared PostgreSQL database** for all services:
 
 **Key Components:**
-- **Data Interfaces** (`data_interfaces.py`): Abstract contracts for any data backend
-- **JSON Implementation** (`json_data_impl.py`): Current JSON file backend
-- **FastAPI Server** (`api_server.py`): REST API with CORS support
-- **Always-Available Export**: JSON backup generation for debugging/migration
+- **PostgreSQL Database**: Shared data storage with JSONB flexibility
+- **SQLAlchemy Models**: Type-safe database models with relationships
+- **Creator Management**: Full CRUD interface for managing content creators
+- **Data Abstraction**: Interface contracts maintained for future migrations
+
+### ✅ Builder Frontend (Port 3001)
+- **Creator Management CRUD**: Complete interface for managing creators
+  - Create new creators with comprehensive profile information
+  - Edit existing creator details including categories and social links
+  - Delete creators with cascade handling for related content
+  - Real-time API integration with loading states and error handling
+- React + TypeScript with Tailwind CSS
+- Hot toast notifications for user feedback
+- Responsive design with proper loading and empty states
+
+### ✅ Builder Backend API (Port 5001)
+**Database Integration:**
+- PostgreSQL with SQLAlchemy ORM
+- JSONB columns for flexible content structures
+- Proper indexing for performance
+- Database migrations with Alembic
 
 **API Endpoints:**
 ```
-GET  /api/health              # System status
-GET  /api/creators            # List creators
-POST /api/creators            # Create creator
-GET  /api/cards              # List content cards  
-GET  /api/sets               # List content sets
-POST /api/export             # Export all data to JSON
-GET  /api/debug/data-summary # Development info
+GET    /api/creators           # List all creators
+POST   /api/creators           # Create new creator
+GET    /api/creators/{id}      # Get creator by ID
+PUT    /api/creators/{id}      # Update creator
+DELETE /api/creators/{id}      # Delete creator
+POST   /api/creators/{id}/avatar   # Upload avatar
+POST   /api/creators/{id}/banner   # Upload banner
+GET    /api/sets              # List content sets
+POST   /api/sets              # Create content set
+GET    /api/cards             # List content cards
+POST   /api/generate          # Generate AI content
+POST   /api/export            # Export data
 ```
 
-**Browser Testing:** `http://localhost:5001/` (Interactive test interface)
+### ✅ Shared Database (Port 5432)
+- **PostgreSQL 15** with UTF-8 support
+- **Tables**: creators, content_sets, content_cards
+- **JSONB Fields**: domain_data, media, navigation_contexts, tags
+- **Indexes**: GIN indexes on JSONB columns for fast queries
+- **Relationships**: Foreign keys with cascade delete
 
-**Current Data:**
-- 2 Creators: "Lunar Explorer" (space content), "Longe Vida" (wellness 50+)
-- 13 Content Cards: Educational content on health, space exploration
-- 3 Content Sets: Grouped thematic content collections
-
-**Verification Commands:**
-```bash
-# Test API health
-curl http://localhost:5001/api/health
-
-# Get data summary  
-curl http://localhost:5001/api/debug/data-summary
-
-# Export all data to JSON (for Obsidian viewing)
-curl -X POST http://localhost:5001/api/export
-```
-
-### 🔄 Builder Frontend (Port 5010)
-- React development server running
-- Configured to proxy API calls to backend
-- **Next Phase**: Connect to API endpoints for CRUD operations
-
-### ✅ Viewer (Port 3000/8001)
-- Fully functional PWA
-- Consumes exported JSON from Builder
+### ✅ Viewer (Port 3000)
+- React PWA for content consumption
+- Connects to same API for real-time data access
+- Netflix-style content discovery interface
 
 ## Getting Started
 
-### Development
+### Quick Start with Docker (Recommended)
 
 1. Clone the repository:
 ```bash
@@ -172,36 +186,66 @@ git clone https://github.com/[username]/boxiii.git
 cd boxiii
 ```
 
-2. Setup Builder Backend:
+2. Create environment file:
+```bash
+cp .env.example .env
+# Edit .env with your API keys:
+# - GEMINI_API_KEY=your_key
+# - CLAUDE_API_KEY=your_key  
+# - OPENAI_API_KEY=your_key
+# - JWT_SECRET=your_secret
+# - DB_PASSWORD=your_db_password
+```
+
+3. Start all services:
+```bash
+# Use the unified Docker compose file
+docker-compose -f docker-compose.unified.yml up -d
+
+# Services will be available at:
+# - Builder Frontend: http://localhost:3001
+# - Builder Backend API: http://localhost:5001  
+# - Viewer: http://localhost:3000
+# - PostgreSQL: localhost:5432
+```
+
+4. Initialize the database:
+```bash
+# The database will auto-initialize with the schema
+# Check logs: docker-compose -f docker-compose.unified.yml logs postgres
+```
+
+### Manual Development Setup
+
+1. **Database Setup:**
+```bash
+# Start PostgreSQL container
+docker run --name boxiii-postgres -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:15-alpine
+```
+
+2. **Builder Backend:**
 ```bash
 cd builder/backend
 python -m venv venv
 source venv/bin/activate  # or `venv\Scripts\activate` on Windows
 pip install -r requirements.txt
-# Copy .env.example to .env and add your API keys
-cp ../../.env.example ../../.env
-# Start API server
+# Set DATABASE_URL environment variable
+export DATABASE_URL="postgresql://boxiii_user:password@localhost:5432/boxiii"
 python api_server.py
 ```
 
-3. Setup Builder Frontend:
+3. **Builder Frontend:**
 ```bash
 cd builder/frontend
 npm install
-npm run dev  # Starts on port 5010
+npm run dev  # Starts on port 3001
 ```
 
-4. Setup Viewer:
+4. **Viewer:**
 ```bash
 cd viewer
 npm install
-npm start
-```
-
-### Docker Deployment
-
-```bash
-docker-compose up -d
+npm run dev  # Starts on port 3000
 ```
 
 ## Security

@@ -2,12 +2,13 @@
 
 ## System Design Philosophy
 
-Boxiii follows a **decoupled architecture** where Builder and Viewer operate independently, communicating only through data exports. This design choice provides:
+Boxiii follows a **unified database architecture** where Builder and Viewer share a PostgreSQL database but maintain service separation. This design provides:
 
-1. **Independent scaling** - Each service can scale based on its usage patterns
-2. **Technology flexibility** - Different tech stacks can be used where appropriate
-3. **Security isolation** - Admin functions are completely separated from public access
-4. **Deployment flexibility** - Services can be deployed to different environments
+1. **Real-time data consistency** - All services access the same data source
+2. **ACID compliance** - Database ensures data integrity across operations
+3. **Flexible schema** - JSONB columns allow evolution without migrations
+4. **Performance optimization** - Proper indexing and query optimization
+5. **Service isolation** - Independent deployment with shared data layer
 
 ## Service Architecture
 
@@ -24,18 +25,20 @@ Boxiii follows a **decoupled architecture** where Builder and Viewer operate ind
 │  └── Export Controls                                        │
 ├─────────────────────────────────────────────────────────────┤
 │  Backend API (Python/FastAPI)                                │
-│  ├── Auth Middleware                                         │
+│  ├── Auth Middleware (JWT)                                   │
 │  ├── Content Generation Engine                               │
 │  │   ├── Topic Extraction                                   │
 │  │   ├── Card Generation                                     │
 │  │   └── Multi-LLM Provider Interface                       │
-│  ├── Data Management                                         │
-│  │   ├── Creator CRUD                                       │
-│  │   ├── Content Set CRUD                                   │
-│  │   └── Card CRUD                                          │
-│  └── Export Service                                          │
-│      ├── JSON Export                                        │
-│      └── MongoDB Export (future)                            │
+│  ├── Database Layer (SQLAlchemy)                            │
+│  │   ├── PostgreSQL with JSONB                              │
+│  │   ├── Creator Models & CRUD                              │
+│  │   ├── Content Set Models & CRUD                          │
+│  │   └── Card Models & CRUD                                 │
+│  └── API Services                                            │
+│      ├── Creator Management API                             │
+│      ├── Content Generation API                             │
+│      └── Export Service (JSON backup)                       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -53,17 +56,76 @@ Boxiii follows a **decoupled architecture** where Builder and Viewer operate ind
 │  └── Payment Integration (future)                            │
 ├─────────────────────────────────────────────────────────────┤
 │  Data Layer                                                  │
-│  ├── JSON Import Service                                     │
+│  ├── API Client (Builder Backend)                           │
 │  ├── Local Storage Cache                                     │
-│  └── MongoDB Connection (future)                            │
+│  ├── Service Worker (Offline Support)                       │
+│  └── IndexedDB (Local Persistence)                          │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ## Data Architecture
 
-### JSON Schema Evolution
+### PostgreSQL Database Schema
 
-The Viewer's newer JSON format will be the standard for both services:
+The unified database uses PostgreSQL with JSONB for flexible content storage:
+
+#### Core Tables Structure
+```sql
+-- Creators table (stable schema)
+CREATE TABLE creators (
+    creator_id VARCHAR(255) PRIMARY KEY,
+    display_name VARCHAR(255) NOT NULL,
+    platform VARCHAR(50) NOT NULL,
+    platform_handle VARCHAR(255) NOT NULL,
+    avatar_url TEXT,
+    banner_url TEXT,
+    description TEXT,
+    categories TEXT[],
+    follower_count INTEGER,
+    verified BOOLEAN DEFAULT FALSE,
+    social_links JSONB DEFAULT '{}',
+    expertise_areas TEXT[],
+    content_style VARCHAR(50) DEFAULT 'educational',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Content Sets table
+CREATE TABLE content_sets (
+    set_id VARCHAR(255) PRIMARY KEY,
+    creator_id VARCHAR(255) REFERENCES creators(creator_id),
+    title TEXT NOT NULL,
+    description TEXT,
+    category VARCHAR(100) NOT NULL,
+    thumbnail_url TEXT,
+    banner_url TEXT,
+    card_count INTEGER DEFAULT 0,
+    -- ... other fields with JSONB for flexibility
+    stats JSONB DEFAULT '{}',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Content Cards table (hybrid schema)
+CREATE TABLE content_cards (
+    card_id VARCHAR(255) PRIMARY KEY,
+    set_id VARCHAR(255) REFERENCES content_sets(set_id),
+    creator_id VARCHAR(255) REFERENCES creators(creator_id),
+    title TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    order_index INTEGER NOT NULL,
+    detailed_content TEXT,
+    -- Flexible JSONB fields
+    domain_data JSONB DEFAULT '{}',
+    media JSONB DEFAULT '[]',
+    navigation_contexts JSONB DEFAULT '{}',
+    tags JSONB DEFAULT '[]',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+### TypeScript Interfaces
 
 ```typescript
 // Creator Schema
@@ -152,27 +214,46 @@ interface Card {
 ### Docker Containers
 
 ```yaml
-# docker-compose.yml structure
+# docker-compose.unified.yml structure
 services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: boxiii
+      POSTGRES_USER: boxiii_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports: ["5432:5432"]
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    
+  builder-backend:
+    build: ./builder
+    ports: ["5001:5000"]
+    environment:
+      - DATABASE_URL=postgresql://boxiii_user:${DB_PASSWORD}@postgres:5432/boxiii
+      - JWT_SECRET=${JWT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - postgres
+      
   builder-frontend:
     build: ./builder/frontend
     ports: ["3001:3000"]
-    
-  builder-backend:
-    build: ./builder/backend
-    ports: ["8001:8000"]
     environment:
-      - JWT_SECRET
-      - LLM_API_KEYS
+      - VITE_API_URL=http://localhost:5001/api
+    depends_on:
+      - builder-backend
       
   viewer:
     build: ./viewer
     ports: ["3000:3000"]
-    
-  nginx:
-    image: nginx
-    ports: ["80:80", "443:443"]
-    # Reverse proxy configuration
+    environment:
+      - VITE_API_URL=http://localhost:5001/api/public
+    depends_on:
+      - builder-backend
 ```
 
 ## Security Considerations
@@ -194,25 +275,35 @@ services:
 
 ## Migration Path
 
-### Phase 1: Repository Consolidation (Current)
-- Merge codebases
-- Standardize data format
-- Setup Docker structure
+### ✅ Phase 1: Database Unification (Complete)
+- Implemented PostgreSQL with JSONB for flexibility
+- Created SQLAlchemy models with relationships
+- Set up unified Docker compose structure
+- Database initialization scripts
 
-### Phase 2: UI Migration
-- Port Builder from Gradio to React
-- Implement authentication
-- Update data generation
+### ✅ Phase 2: Creator Management (Complete)
+- Built React frontend with TypeScript
+- Implemented full CRUD for Creator management
+- API service layer with error handling
+- Real-time data integration
 
-### Phase 3: Production Deployment
-- Deploy to VPS
-- Setup monitoring
-- Implement backups
+### 🔄 Phase 3: Backend Migration (In Progress)
+- Update FastAPI to use SQLAlchemy instead of JSON files
+- Implement proper authentication with JWT
+- Add file upload handling for avatars/banners
+- Database session management
 
-### Phase 4: Advanced Features
-- MongoDB migration
-- Payment integration
-- Analytics dashboard
+### Phase 4: Content Generation (Planned)
+- Connect AI generation to database
+- Implement Content Set and Card management
+- Export functionality for Viewer
+- Cost optimization for LLM operations
+
+### Phase 5: Production Deployment (Future)
+- Deploy to cloud infrastructure
+- Setup monitoring and logging
+- Implement backup strategies
+- Performance optimization
 
 ## Performance Considerations
 
