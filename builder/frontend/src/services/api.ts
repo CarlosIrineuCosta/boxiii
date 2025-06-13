@@ -185,11 +185,15 @@ export const exportAPI = {
 };
 
 // Types
+export interface Platform {
+  platform: string;
+  handle: string;
+}
+
 export interface Creator {
   creator_id: string;
   display_name: string;
-  platform: string;
-  platform_handle: string;
+  platforms: Platform[];
   avatar_url?: string;
   banner_url?: string;
   description: string;
@@ -201,6 +205,9 @@ export interface Creator {
   content_style: string;
   created_at: string;
   updated_at: string;
+  // Legacy fields for backward compatibility
+  platform?: string;
+  platform_handle?: string;
 }
 
 export interface ContentSet {

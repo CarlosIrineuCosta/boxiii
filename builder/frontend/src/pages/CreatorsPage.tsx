@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, PencilIcon, TrashIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
-import { creatorAPI, Creator } from '../services/api';
+import { creatorAPI } from '../services/api';
+import type { Creator } from '../services/api';
 import CreatorModal from '../components/CreatorModal';
 import { toast } from 'react-hot-toast';
 
@@ -196,12 +197,20 @@ export default function CreatorsPage() {
                             </div>
                             <div className="ml-4">
                               <div className="font-medium text-gray-900">{creator.display_name}</div>
-                              <div className="text-gray-500">{creator.platform_handle}</div>
+                              <div className="text-gray-500">
+                                {creator.platforms && creator.platforms.length > 0 
+                                  ? creator.platforms[0].handle 
+                                  : (creator.platform_handle || '')
+                                }
+                              </div>
                             </div>
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {creator.platform.charAt(0).toUpperCase() + creator.platform.slice(1)}
+                          {creator.platforms && creator.platforms.length > 0 
+                            ? creator.platforms[0].platform.charAt(0).toUpperCase() + creator.platforms[0].platform.slice(1)
+                            : (creator.platform ? creator.platform.charAt(0).toUpperCase() + creator.platform.slice(1) : '-')
+                          }
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {creator.follower_count ? creator.follower_count.toLocaleString() : '-'}
