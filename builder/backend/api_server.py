@@ -17,26 +17,32 @@ from datetime import datetime
 
 # Import our data interfaces
 from data_interfaces import DataManager
-from json_data_impl import JSONCreatorData, JSONContentData, JSONContentSetData
+from postgresql_data_impl import PostgreSQLConnection, PostgreSQLCreatorData, PostgreSQLContentData, PostgreSQLContentSetData
 
 
 # Pydantic models for API validation
+class Platform(BaseModel):
+    platform: str
+    handle: str
+
 class CreatorCreate(BaseModel):
     display_name: str
-    platform: str = "website"
-    platform_handle: Optional[str] = None
+    platforms: List[Platform] = []
     description: Optional[str] = None
     categories: List[str] = []
     content_style: str = "educational"
+    verified: bool = False
+    follower_count: Optional[int] = None
 
 
 class CreatorUpdate(BaseModel):
     display_name: Optional[str] = None
-    platform: Optional[str] = None
-    platform_handle: Optional[str] = None
+    platforms: Optional[List[Platform]] = None
     description: Optional[str] = None
     categories: Optional[List[str]] = None
     content_style: Optional[str] = None
+    verified: Optional[bool] = None
+    follower_count: Optional[int] = None
 
 
 class CardCreate(BaseModel):
@@ -86,12 +92,12 @@ async def get_data_manager() -> DataManager:
     """Dependency to get data manager instance"""
     global data_manager
     if data_manager is None:
-        # Initialize with JSON backend
-        data_dir = Path(__file__).parent / "data"
+        # Initialize with PostgreSQL backend
+        db_connection = PostgreSQLConnection()
         data_manager = DataManager(
-            creator_interface=JSONCreatorData(data_dir),
-            content_interface=JSONContentData(data_dir),
-            set_interface=JSONContentSetData(data_dir)
+            creator_interface=PostgreSQLCreatorData(db_connection),
+            content_interface=PostgreSQLContentData(db_connection),
+            set_interface=PostgreSQLContentSetData(db_connection)
         )
     return data_manager
 

@@ -1,11 +1,42 @@
+import { useState, useEffect } from 'react'
 import { DocumentTextIcon, UserGroupIcon, SparklesIcon } from '@heroicons/react/24/outline'
+import { creatorAPI, contentSetAPI, contentCardAPI } from '../services/api'
 
 export default function DashboardPage() {
-  const stats = [
-    { name: 'Total Content Sets', value: '24', icon: DocumentTextIcon, color: 'bg-blue-500' },
-    { name: 'Active Creators', value: '8', icon: UserGroupIcon, color: 'bg-green-500' },
-    { name: 'Cards Generated', value: '156', icon: SparklesIcon, color: 'bg-purple-500' },
-  ]
+  const [stats, setStats] = useState([
+    { name: 'Total Content Sets', value: '...', icon: DocumentTextIcon, color: 'bg-blue-500' },
+    { name: 'Active Creators', value: '...', icon: UserGroupIcon, color: 'bg-green-500' },
+    { name: 'Cards Generated', value: '...', icon: SparklesIcon, color: 'bg-purple-500' },
+  ])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        // Fetch all cards by calling the API without set filter
+        const creatorsResponse = await fetch('/api/creators')
+        const setsResponse = await fetch('/api/sets')
+        const cardsResponse = await fetch('/api/cards')
+        
+        const creators = await creatorsResponse.json()
+        const sets = await setsResponse.json()
+        const cards = await cardsResponse.json()
+
+        setStats([
+          { name: 'Total Content Sets', value: (sets?.data?.length || sets?.length || 0).toString(), icon: DocumentTextIcon, color: 'bg-blue-500' },
+          { name: 'Active Creators', value: (creators?.data?.length || creators?.length || 0).toString(), icon: UserGroupIcon, color: 'bg-green-500' },
+          { name: 'Cards Generated', value: (cards?.data?.length || cards?.length || 0).toString(), icon: SparklesIcon, color: 'bg-purple-500' },
+        ])
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error)
+        // Keep default values on error
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStats()
+  }, [])
 
   const recentActivity = [
     { id: 1, creator: 'Ana Contti', contentSet: 'Programa Longe Vida', cards: 7, date: '2 hours ago' },

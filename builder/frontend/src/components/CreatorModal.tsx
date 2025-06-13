@@ -58,7 +58,8 @@ const CreatorModal: React.FC<CreatorModalProps> = ({ isOpen, onClose, onSave, cr
       });
     }
     setNewPlatform({ platform: 'youtube', handle: '' });
-  }, [creator]);
+    setError(''); // Clear any previous errors
+  }, [creator, isOpen]); // Reset when modal opens/closes
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
