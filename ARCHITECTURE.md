@@ -1,20 +1,18 @@
-# Boxiii Architecture Document
+Boxiii Architecture Document
+System Design Philosophy
+Boxiii follows a decoupled architecture where the Builder and Viewer services operate independently. They share a common PostgreSQL database as the single source of truth, but do not communicate directly via API calls. This provides:
 
-## System Design Philosophy
+Independent Scaling: Each service can be scaled based on its specific load.
+Technology Flexibility: The frontend and backend can evolve independently.
+Security Isolation: Admin functions are completely separated from the public-facing application.
+Service Architecture
 
-Boxiii follows a **unified database architecture** where Builder and Viewer share a PostgreSQL database but maintain service separation. This design provides:
+1. Builder Service (Admin/CMS)
 
-1. **Real-time data consistency** - All services access the same data source
-2. **ACID compliance** - Database ensures data integrity across operations
-3. **Flexible schema** - JSONB columns allow evolution without migrations
-4. **Performance optimization** - Proper indexing and query optimization
-5. **Service isolation** - Independent deployment with shared data layer
-
-## Service Architecture
-
-### 1. Builder Service (Admin/CMS)
+The Builder is a React-based Single Page Application that communicates with a Python/FastAPI backend API to manage platform content.
 
 ```
+
 ┌─────────────────────────────────────────────────────────────┐
 │                      Builder Service                          │
 ├─────────────────────────────────────────────────────────────┤

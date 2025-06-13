@@ -1,48 +1,91 @@
+--------------------------------------------------------------------------------
+-- README.md 
+-- update: 13 jun 2025 -- 02:29
+--------------------------------------------------------------------------------
+
 # Boxiii - AI-Powered Educational Content Platform
 
 ## Overview
 
-Boxiii is a comprehensive educational content platform that combines AI-powered content generation with Netflix-style content discovery. The system consists of two main services:
+Boxiii is a comprehensive educational content platform that combines AI-powered content generation with a Netflix-style content discovery experience. The system consists of two main services:
 
-- **Builder**: Admin/CMS interface for content creation and management
-- **Viewer**: Public-facing PWA for content consumption
+- **Builder**: An admin/CMS interface for content creation and management, built with a React frontend and a Python/FastAPI backend.
+- **Viewer**: A public-facing Progressive Web App (PWA) for content consumption, also built with React.
 
 ## Architecture
 
+The system follows a decoupled architecture, with a shared PostgreSQL database.
+
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        Boxiii Platform                        │
+│                        Boxiii Platform                      │
 ├─────────────────────────┬───────────────────────────────────┤
 │    Builder (Admin)      │        Viewer (Public)            │
 ├─────────────────────────┼───────────────────────────────────┤
-│ • React + Tailwind      │ • React PWA                      │
-│ • Python API Backend    │ • Tailwind CSS                   │
-│ • Multi-LLM Support     │ • Netflix-style UI               │
-│ • Authentication        │ • User Authentication            │
-│ • Content Management    │ • Content Discovery              │
-│ • Export to JSON/DB     │ • Import from JSON/DB            │
+│ • React (Vite) + Tailwind │ • React (Vite) + Tailwind       │
+│ • Python FastAPI Backend │ • Netflix-style UI               │
+│ • PostgreSQL Database   │ • User Authentication             │
+│ • Multi-LLM Support     │ • Content Discovery               │
 └─────────────────────────┴───────────────────────────────────┘
+
 ```
 
 ## Directory Structure
 
 ```
 boxiii/
-├── builder/               # Admin/CMS application
-│   ├── frontend/         # React + Tailwind UI
-│   ├── backend/          # Python API
+├── builder/
+│   ├── backend/          # Python FastAPI API
+│   ├── frontend/         # React + Vite Admin UI
 │   └── Dockerfile
-├── viewer/               # Public PWA
-│   ├── src/             # React application
-│   ├── public/          # Static assets
+├── viewer/               # Public PWA (React + Vite)
+│   ├── src/
+│   ├── public/
 │   └── Dockerfile
-├── shared/              # Shared utilities and types
-│   ├── types/           # TypeScript interfaces
-│   └── schemas/         # JSON schemas
-├── docs/                # Documentation
-├── .docker/             # Docker configurations
-└── docker-compose.yml   # Multi-container setup
+├── shared/               # Shared utilities, types, etc.
+│   └── uploads/
+├── database/
+│   └── init/             # SQL initialization scripts
+└── docker-compose.yml    # Main docker-compose setup
 ```
+
+## Technology Stack
+
+### Frontend (Both Services)
+- React 18+
+- Vite
+- Tailwind CSS
+
+### Builder Backend
+- Python 3.12+
+- FastAPI
+- PostgreSQL with JSONB support
+- Multi-provider LLM integration (Gemini, Claude, GPT)
+
+### Infrastructure
+- Docker & Docker Compose
+- PostgreSQL
+- JWT authentication
+
+## Getting Started
+
+### Prerequisites
+- Docker and Docker Compose
+- An `.env` file created from `.env.example` with your API keys.
+
+### Running the Platform
+
+To launch the entire platform (PostgreSQL DB, Builder Backend, Builder Frontend, Viewer), run:
+
+```bash
+docker-compose up -d --build
+
+Viewer (Public App) will be available at http://localhost:3000
+Builder (Admin App) will be available at http://localhost:3001
+Builder Backend API is exposed at http://localhost:5001
+
+
 
 ## Key Features
 
