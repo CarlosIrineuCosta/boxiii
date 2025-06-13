@@ -21,11 +21,15 @@ from database import get_db, init_db, check_db_connection
 from database.models import Creator, ContentSet, ContentCard
 
 
+# Platform model for multiple platforms
+class Platform(BaseModel):
+    platform: str
+    handle: str
+
 # Pydantic models for API validation
 class CreatorCreate(BaseModel):
     display_name: str
-    platform: str = "website"
-    platform_handle: str
+    platforms: List[Platform] = []
     description: Optional[str] = ""
     categories: List[str] = []
     follower_count: Optional[int] = None
@@ -37,8 +41,7 @@ class CreatorCreate(BaseModel):
 
 class CreatorUpdate(BaseModel):
     display_name: Optional[str] = None
-    platform: Optional[str] = None
-    platform_handle: Optional[str] = None
+    platforms: Optional[List[Platform]] = None
     description: Optional[str] = None
     categories: Optional[List[str]] = None
     follower_count: Optional[int] = None
@@ -115,10 +118,16 @@ async def startup_event():
 
 
 # Helper function to generate IDs
-def generate_creator_id(platform_handle: str) -> str:
-    """Generate creator ID from platform handle"""
+def generate_creator_id(display_name: str, platforms: List[Dict] = None) -> str:
+    """Generate creator ID from display name and first platform"""
     import uuid
-    clean_handle = platform_handle.replace("@", "").lower()
+    # Use first platform handle if available, otherwise use display name
+    if platforms and len(platforms) > 0:
+        clean_handle = platforms[0].get("handle", "").replace("@", "").lower()
+    else:
+        clean_handle = display_name.replace(" ", "_").lower()
+    
+    clean_handle = "".join(c for c in clean_handle if c.isalnum() or c == "_")[:20]
     return f"{clean_handle}_{uuid.uuid4().hex[:8]}"
 
 
@@ -199,13 +208,24 @@ async def get_creator(creator_id: str, db: Session = Depends(get_db)):
 async def create_creator(creator_data: CreatorCreate, db: Session = Depends(get_db)):
     """Create new creator"""
     try:
+        # Convert platforms to dict format for database
+        platforms_dict = [{"platform": p.platform, "handle": p.handle} for p in creator_data.platforms]
+        
         # Generate creator ID
-        creator_id = generate_creator_id(creator_data.platform_handle)
+        creator_id = generate_creator_id(creator_data.display_name, platforms_dict)
         
         # Create creator object
         creator = Creator(
             creator_id=creator_id,
-            **creator_data.dict()
+            display_name=creator_data.display_name,
+            platforms=platforms_dict,
+            description=creator_data.description,
+            categories=creator_data.categories,
+            follower_count=creator_data.follower_count,
+            verified=creator_data.verified,
+            social_links=creator_data.social_links,
+            expertise_areas=creator_data.expertise_areas,
+            content_style=creator_data.content_style
         )
         
         db.add(creator)
@@ -236,6 +256,12 @@ async def update_creator(
     try:
         # Update fields
         update_data = creator_data.dict(exclude_unset=True)
+        
+        # Convert platforms if provided
+        if "platforms" in update_data and update_data["platforms"] is not None:
+            platforms_dict = [{"platform": p.platform, "handle": p.handle} for p in update_data["platforms"]]
+            update_data["platforms"] = platforms_dict
+        
         for field, value in update_data.items():
             setattr(creator, field, value)
         

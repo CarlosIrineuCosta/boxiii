@@ -18,8 +18,7 @@ class Creator(Base):
     
     creator_id = Column(String(255), primary_key=True)
     display_name = Column(String(255), nullable=False)
-    platform = Column(String(50), nullable=False)
-    platform_handle = Column(String(255), nullable=False)
+    platforms = Column(JSONB, default=list)  # [{"platform": "youtube", "handle": "channelname"}]
     avatar_url = Column(Text)
     banner_url = Column(Text)
     description = Column(Text)
@@ -32,6 +31,10 @@ class Creator(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     
+    # Legacy fields for backward compatibility (will be removed in migration)
+    platform = Column(String(50))  # Keep temporarily for migration
+    platform_handle = Column(String(255))  # Keep temporarily for migration
+    
     # Relationships
     content_sets = relationship("ContentSet", back_populates="creator", cascade="all, delete-orphan")
     content_cards = relationship("ContentCard", back_populates="creator", cascade="all, delete-orphan")
@@ -40,19 +43,21 @@ class Creator(Base):
         return {
             "creator_id": self.creator_id,
             "display_name": self.display_name,
-            "platform": self.platform,
-            "platform_handle": self.platform_handle,
+            "platforms": self.platforms or [],
             "avatar_url": self.avatar_url,
             "banner_url": self.banner_url,
             "description": self.description,
-            "categories": self.categories,
+            "categories": self.categories or [],
             "follower_count": self.follower_count,
             "verified": self.verified,
-            "social_links": self.social_links,
-            "expertise_areas": self.expertise_areas,
+            "social_links": self.social_links or {},
+            "expertise_areas": self.expertise_areas or [],
             "content_style": self.content_style,
             "created_at": self.created_at.isoformat() if self.created_at else None,
-            "updated_at": self.updated_at.isoformat() if self.updated_at else None
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            # Legacy fields for backward compatibility
+            "platform": self.platforms[0]["platform"] if self.platforms else (self.platform or ""),
+            "platform_handle": self.platforms[0]["handle"] if self.platforms else (self.platform_handle or "")
         }
 
 

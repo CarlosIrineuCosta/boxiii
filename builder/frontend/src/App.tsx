@@ -8,7 +8,7 @@ import GeneratePage from './pages/GeneratePage'
 import Layout from './components/Layout'
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(true)
 
   return (
     <Router>
