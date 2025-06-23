@@ -34,33 +34,60 @@ class PostgreSQLCreatorData(CreatorDataInterface):
     def __init__(self, connection: PostgreSQLConnection):
         self.connection = connection
     
+    def _prepare_platforms(self, platforms):
+        """
+        Prepare platform data for database storage.
+        
+        NOTE: Validation is now handled at the API layer (Pydantic) in api_server.py
+        This method only handles data preparation/formatting.
+        """
+        if not platforms:
+            return []
+        
+        prepared = []
+        for platform in platforms:
+            if not isinstance(platform, dict):
+                continue
+            
+            platform_name = platform.get('platform', '').strip().lower()
+            handle = platform.get('handle', '').strip()
+            
+            if platform_name and handle:
+                prepared.append({
+                    'platform': platform_name,
+                    'handle': handle
+                })
+        
+        return prepared
+    
     async def create_creator(self, creator_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Create new creator in database.
+        
+        NOTE: Platform validation is now handled at API layer (Pydantic).
+        This method receives already-validated data from api_server.py
+        """
         session = self.connection.get_session()
         try:
             # Generate ID if not provided
             if 'creator_id' not in creator_data:
                 creator_data['creator_id'] = f"{creator_data.get('display_name', 'creator').lower().replace(' ', '_')}_{str(uuid.uuid4())[:8]}"
             
-            # Convert platforms if provided as array
+            # Prepare platforms for database storage (already validated)
             platforms = creator_data.get('platforms', [])
-            if not platforms and creator_data.get('platform'):
-                # Convert legacy format
-                platforms = [{'platform': creator_data['platform'], 'handle': creator_data.get('platform_handle', '')}]
+            prepared_platforms = self._prepare_platforms(platforms)
             
             creator = Creator(
                 creator_id=creator_data['creator_id'],
                 display_name=creator_data['display_name'],
-                platforms=platforms,
+                platforms=prepared_platforms,
                 description=creator_data.get('description'),
                 categories=creator_data.get('categories', []),
                 follower_count=creator_data.get('follower_count'),
                 verified=creator_data.get('verified', False),
                 social_links=creator_data.get('social_links', {}),
                 expertise_areas=creator_data.get('expertise_areas', []),
-                content_style=creator_data.get('content_style', 'educational'),
-                # Legacy fields for backward compatibility
-                platform=platforms[0]['platform'] if platforms else creator_data.get('platform', 'website'),
-                platform_handle=platforms[0]['handle'] if platforms else creator_data.get('platform_handle', '')
+                content_style=creator_data.get('content_style', 'educational')
             )
             
             session.add(creator)
@@ -96,23 +123,26 @@ class PostgreSQLCreatorData(CreatorDataInterface):
             session.close()
     
     async def update_creator(self, creator_id: str, updates: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Update creator in database.
+        
+        NOTE: Platform validation is now handled at API layer (Pydantic).
+        This method receives already-validated data from api_server.py
+        """
         session = self.connection.get_session()
         try:
             creator = session.query(Creator).filter_by(creator_id=creator_id).first()
             if not creator:
                 raise ValueError(f"Creator {creator_id} not found")
             
-            # Handle platforms update
+            # Handle platforms update (already validated)
             if 'platforms' in updates:
-                creator.platforms = updates['platforms']
-                # Update legacy fields too
-                if updates['platforms']:
-                    creator.platform = updates['platforms'][0]['platform']
-                    creator.platform_handle = updates['platforms'][0]['handle']
+                prepared_platforms = self._prepare_platforms(updates['platforms'])
+                creator.platforms = prepared_platforms
             
             # Update other fields
             for key, value in updates.items():
-                if hasattr(creator, key) and key != 'creator_id':
+                if hasattr(creator, key) and key not in ['creator_id', 'platforms']:
                     setattr(creator, key, value)
             
             session.commit()
@@ -137,6 +167,47 @@ class PostgreSQLCreatorData(CreatorDataInterface):
             raise e
         finally:
             session.close()
+    
+    async def export_to_json(self, output_path) -> Dict[str, Any]:
+        """Export all creators to JSON format"""
+        creators = await self.list_creators()
+        export_data = {
+            "creators": creators,
+            "exported_at": datetime.now().isoformat(),
+            "total_count": len(creators)
+        }
+        
+        if output_path:
+            import json
+            from pathlib import Path
+            output_path = Path(output_path)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(output_path, 'w') as f:
+                json.dump(export_data, f, indent=2)
+        
+        return export_data
+    
+    async def get_schema(self) -> Dict[str, Any]:
+        """Get creator data schema"""
+        return {
+            "table": "creators",
+            "fields": {
+                "creator_id": {"type": "string", "primary_key": True},
+                "display_name": {"type": "string", "required": True},
+                "platforms": {"type": "jsonb", "schema": {"platform": "string", "handle": "string"}},
+                "avatar_url": {"type": "text", "optional": True},
+                "banner_url": {"type": "text", "optional": True},
+                "description": {"type": "text", "optional": True},
+                "categories": {"type": "array[string]", "default": []},
+                "follower_count": {"type": "integer", "optional": True},
+                "verified": {"type": "boolean", "default": False},
+                "social_links": {"type": "jsonb", "default": {}},
+                "expertise_areas": {"type": "array[string]", "default": []},
+                "content_style": {"type": "string", "default": "educational"},
+                "created_at": {"type": "datetime", "auto": True},
+                "updated_at": {"type": "datetime", "auto": True}
+            }
+        }
 
 
 class PostgreSQLContentSetData(ContentSetDataInterface):
@@ -237,6 +308,54 @@ class PostgreSQLContentSetData(ContentSetDataInterface):
             raise e
         finally:
             session.close()
+    
+    async def export_to_json(self, output_path) -> Dict[str, Any]:
+        """Export all content sets to JSON format"""
+        sets = await self.list_sets()
+        export_data = {
+            "content_sets": sets,
+            "exported_at": datetime.now().isoformat(),
+            "total_count": len(sets)
+        }
+        
+        if output_path:
+            import json
+            from pathlib import Path
+            output_path = Path(output_path)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(output_path, 'w') as f:
+                json.dump(export_data, f, indent=2)
+        
+        return export_data
+    
+    async def get_schema(self) -> Dict[str, Any]:
+        """Get content set data schema"""
+        return {
+            "table": "content_sets",
+            "fields": {
+                "set_id": {"type": "string", "primary_key": True},
+                "creator_id": {"type": "string", "foreign_key": "creators.creator_id"},
+                "title": {"type": "text", "required": True},
+                "description": {"type": "text", "optional": True},
+                "category": {"type": "string", "required": True},
+                "thumbnail_url": {"type": "text", "optional": True},
+                "banner_url": {"type": "text", "optional": True},
+                "card_count": {"type": "integer", "default": 0},
+                "estimated_time_minutes": {"type": "integer", "default": 30},
+                "difficulty_level": {"type": "string", "default": "intermediate"},
+                "target_audience": {"type": "string", "default": "general_public"},
+                "supported_navigation": {"type": "array[string]", "default": []},
+                "content_style": {"type": "string", "default": "question_first"},
+                "tags": {"type": "array[string]", "default": []},
+                "prerequisites": {"type": "array[string]", "default": []},
+                "learning_outcomes": {"type": "array[string]", "default": []},
+                "stats": {"type": "jsonb", "default": {}},
+                "status": {"type": "string", "default": "draft"},
+                "language": {"type": "string", "default": "pt-BR"},
+                "created_at": {"type": "datetime", "auto": True},
+                "updated_at": {"type": "datetime", "auto": True}
+            }
+        }
 
 
 class PostgreSQLContentData(ContentDataInterface):
@@ -351,3 +470,43 @@ class PostgreSQLContentData(ContentDataInterface):
             raise e
         finally:
             session.close()
+    
+    async def export_to_json(self, output_path) -> Dict[str, Any]:
+        """Export all content cards to JSON format"""
+        cards = await self.list_cards()
+        export_data = {
+            "content_cards": cards,
+            "exported_at": datetime.now().isoformat(),
+            "total_count": len(cards)
+        }
+        
+        if output_path:
+            import json
+            from pathlib import Path
+            output_path = Path(output_path)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(output_path, 'w') as f:
+                json.dump(export_data, f, indent=2)
+        
+        return export_data
+    
+    async def get_schema(self) -> Dict[str, Any]:
+        """Get content card data schema"""
+        return {
+            "table": "content_cards",
+            "fields": {
+                "card_id": {"type": "string", "primary_key": True},
+                "set_id": {"type": "string", "foreign_key": "content_sets.set_id"},
+                "creator_id": {"type": "string", "foreign_key": "creators.creator_id"},
+                "title": {"type": "text", "required": True},
+                "summary": {"type": "text", "required": True},
+                "order_index": {"type": "integer", "required": True},
+                "detailed_content": {"type": "text", "optional": True},
+                "domain_data": {"type": "jsonb", "default": {}},
+                "media": {"type": "jsonb", "default": []},
+                "navigation_contexts": {"type": "jsonb", "default": {}},
+                "tags": {"type": "jsonb", "default": []},
+                "created_at": {"type": "datetime", "auto": True},
+                "updated_at": {"type": "datetime", "auto": True}
+            }
+        }

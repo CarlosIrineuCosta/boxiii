@@ -12,7 +12,7 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from typing import List, Dict, Any, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from datetime import datetime
 
 # Import our data interfaces
@@ -24,6 +24,40 @@ from postgresql_data_impl import PostgreSQLConnection, PostgreSQLCreatorData, Po
 class Platform(BaseModel):
     platform: str
     handle: str
+    
+    @field_validator('handle')
+    @classmethod
+    def validate_handle_characters(cls, v: str) -> str:
+        """
+        Validate platform handle characters.
+        
+        DESIGN DECISION: Moving validation to API layer (Pydantic) instead of database layer
+        for better user experience. This ensures:
+        1. Immediate feedback to frontend (422 response) 
+        2. No database round-trip for invalid data
+        3. Standard FastAPI validation pattern
+        4. Clear error messages in UI modal
+        
+        Handles cannot contain spaces or special characters that break platform URLs.
+        """
+        if not v or not v.strip():
+            raise ValueError("Platform handle cannot be empty")
+            
+        forbidden_chars = [' ', '\t', '\n', '@', '#', '&', '?', '=', '+', '%']
+        for char in forbidden_chars:
+            if char in v:
+                raise ValueError(f"Platform handle '{v}' is invalid! Handles cannot contain spaces or special characters like: {', '.join(forbidden_chars)}")
+        return v.strip()
+    
+    @field_validator('platform')
+    @classmethod
+    def validate_supported_platform(cls, v: str) -> str:
+        """Validate platform is supported"""
+        valid_platforms = ['youtube', 'instagram', 'tiktok', 'twitter', 'linkedin', 'website', 'facebook', 'twitch']
+        v_lower = v.lower().strip()
+        if v_lower not in valid_platforms:
+            raise ValueError(f"Platform '{v}' is not supported. Valid platforms: {', '.join(valid_platforms)}")
+        return v_lower  # Store platform names consistently as lowercase
 
 class CreatorCreate(BaseModel):
     display_name: str

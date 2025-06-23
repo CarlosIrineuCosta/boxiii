@@ -3,7 +3,7 @@
  * Handles all API communication with the backend
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 // Helper function for API requests
 async function apiRequest<T>(
@@ -205,9 +205,6 @@ export interface Creator {
   content_style: string;
   created_at: string;
   updated_at: string;
-  // Legacy fields for backward compatibility
-  platform?: string;
-  platform_handle?: string;
 }
 
 export interface ContentSet {

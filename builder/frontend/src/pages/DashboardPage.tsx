@@ -9,11 +9,12 @@ export default function DashboardPage() {
     { name: 'Cards Generated', value: '...', icon: SparklesIcon, color: 'bg-purple-500' },
   ])
   const [loading, setLoading] = useState(true)
+  const [recentActivity, setRecentActivity] = useState<any[]>([])
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchData = async () => {
       try {
-        // Fetch all cards by calling the API without set filter
+        // Fetch all data
         const creatorsResponse = await fetch('/api/creators')
         const setsResponse = await fetch('/api/sets')
         const cardsResponse = await fetch('/api/cards')
@@ -22,27 +23,38 @@ export default function DashboardPage() {
         const sets = await setsResponse.json()
         const cards = await cardsResponse.json()
 
+        // Update stats
         setStats([
           { name: 'Total Content Sets', value: (sets?.data?.length || sets?.length || 0).toString(), icon: DocumentTextIcon, color: 'bg-blue-500' },
           { name: 'Active Creators', value: (creators?.data?.length || creators?.length || 0).toString(), icon: UserGroupIcon, color: 'bg-green-500' },
           { name: 'Cards Generated', value: (cards?.data?.length || cards?.length || 0).toString(), icon: SparklesIcon, color: 'bg-purple-500' },
         ])
+
+        // Create recent activity from real data
+        const creatorsMap = creators.reduce((acc: any, creator: any) => {
+          acc[creator.creator_id] = creator.display_name
+          return acc
+        }, {})
+
+        const activity = sets.map((set: any, index: number) => ({
+          id: index + 1,
+          creator: creatorsMap[set.creator_id] || 'Unknown Creator',
+          contentSet: set.title.length > 50 ? set.title.substring(0, 47) + '...' : set.title,
+          cards: set.card_count || 0,
+          date: new Date(set.created_at).toLocaleDateString()
+        }))
+
+        setRecentActivity(activity)
       } catch (error) {
-        console.error('Error fetching dashboard stats:', error)
+        console.error('Error fetching dashboard data:', error)
         // Keep default values on error
       } finally {
         setLoading(false)
       }
     }
 
-    fetchStats()
+    fetchData()
   }, [])
-
-  const recentActivity = [
-    { id: 1, creator: 'Ana Contti', contentSet: 'Programa Longe Vida', cards: 7, date: '2 hours ago' },
-    { id: 2, creator: 'Lunar Explorer', contentSet: 'Nutrição para Astronautas', cards: 5, date: '5 hours ago' },
-    { id: 3, creator: 'Box I Creator', contentSet: 'Around the World', cards: 10, date: '1 day ago' },
-  ]
 
   return (
     <div>
