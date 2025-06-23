@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import CreatorsPage from './pages/CreatorsPage'
 import GeneratePage from './pages/GeneratePage'
+import PreviewPage from './pages/PreviewPage'
 import Layout from './components/Layout'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/creators" element={<CreatorsPage />} />
           <Route path="/generate" element={<GeneratePage />} />
+          <Route path="/preview" element={<PreviewPage />} />
         </Route>
       </Routes>
     </Router>

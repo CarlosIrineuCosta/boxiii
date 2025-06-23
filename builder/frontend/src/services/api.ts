@@ -134,6 +134,10 @@ export const contentSetAPI = {
 
 // Content Card API endpoints
 export const contentCardAPI = {
+  getAll: async () => {
+    return apiRequest<ContentCard[]>('/cards');
+  },
+
   getBySet: async (setId: string) => {
     return apiRequest<ContentCard[]>(`/cards?set_id=${setId}`);
   },

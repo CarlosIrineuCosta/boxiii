@@ -34,19 +34,36 @@ return response.data; // undefined because response was already an array
 ### How It Was Fixed
 **File**: `/home/cdc/projects/boxiii/builder/frontend/src/services/api.ts:37-39`
 
-**Before**:
+**EXACT CHANGE**:
 ```javascript
+// BEFORE (Line 37-40):
 getAll: async () => {
   const response = await apiRequest<{data: Creator[], count: number}>('/creators');
   return response.data;
 },
-```
 
-**After**:
-```javascript
+// AFTER (Line 37-39):
 getAll: async () => {
   return apiRequest<Creator[]>('/creators');
 },
+```
+
+**WHY THIS WORKS**:
+1. Backend `/api/creators` returns: `[{creator_id: "...", display_name: "..."}, ...]`
+2. Old code: `response.data` where `response` is already an array → `undefined`
+3. New code: Returns array directly → `[{creator_id: "...", display_name: "..."}, ...]`
+4. React component gets actual data instead of `undefined`
+
+**DEBUGGING COMMANDS USED**:
+```bash
+# Verify backend returns array directly:
+curl -s http://localhost:5001/api/creators
+
+# Verify frontend proxy works:  
+curl -s http://localhost:3001/api/creators
+
+# Count returned items:
+curl -s "http://localhost:3001/api/creators" | grep -o "creator_id" | wc -l
 ```
 
 ### Prevention Strategy

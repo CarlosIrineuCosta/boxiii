@@ -3,6 +3,7 @@ import {
   HomeIcon, 
   UserGroupIcon, 
   SparklesIcon,
+  EyeIcon,
   ArrowRightOnRectangleIcon 
 } from '@heroicons/react/24/outline'
 
@@ -13,6 +14,7 @@ export default function Layout() {
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Creators', href: '/creators', icon: UserGroupIcon },
     { name: 'Generate', href: '/generate', icon: SparklesIcon },
+    { name: 'Preview', href: '/preview', icon: EyeIcon },
   ]
 
   const isActive = (path: string) => location.pathname === path

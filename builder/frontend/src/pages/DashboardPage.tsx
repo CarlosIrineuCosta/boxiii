@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { DocumentTextIcon, UserGroupIcon, SparklesIcon } from '@heroicons/react/24/outline'
+import { Link } from 'react-router-dom'
+import { DocumentTextIcon, UserGroupIcon, SparklesIcon, EyeIcon } from '@heroicons/react/24/outline'
 import { creatorAPI, contentSetAPI, contentCardAPI } from '../services/api'
 
 export default function DashboardPage() {
@@ -113,8 +114,8 @@ export default function DashboardPage() {
       <div className="mt-8">
         <h3 className="text-lg font-medium leading-6 text-gray-900">Quick Actions</h3>
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <a
-            href="/generate"
+          <Link
+            to="/generate"
             className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400"
           >
             <div className="flex-shrink-0">
@@ -124,10 +125,10 @@ export default function DashboardPage() {
               <p className="text-sm font-medium text-gray-900">Generate New Content</p>
               <p className="text-sm text-gray-500">Create AI-powered content sets</p>
             </div>
-          </a>
+          </Link>
           
-          <a
-            href="/creators"
+          <Link
+            to="/creators"
             className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400"
           >
             <div className="flex-shrink-0">
@@ -137,7 +138,20 @@ export default function DashboardPage() {
               <p className="text-sm font-medium text-gray-900">Manage Creators</p>
               <p className="text-sm text-gray-500">Add or edit creator profiles</p>
             </div>
-          </a>
+          </Link>
+
+          <Link
+            to="/preview"
+            className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400"
+          >
+            <div className="flex-shrink-0">
+              <EyeIcon className="h-10 w-10 text-purple-600" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-gray-900">Preview Content</p>
+              <p className="text-sm text-gray-500">Inspect and manage generated cards</p>
+            </div>
+          </Link>
         </div>
       </div>
     </div>
