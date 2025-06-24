@@ -29,7 +29,7 @@ class CreatorDataInterface(DataInterface):
     """Interface for creator CRUD operations"""
     
     @abstractmethod
-    async def list_creators(self, limit: Optional[int] = None, offset: int = 0) -> List[Dict[str, Any]]:
+    async def list_creators(self, limit: Optional[int] = None, offset: int = 0, with_content_only: bool = False) -> List[Dict[str, Any]]:
         pass
     
     @abstractmethod

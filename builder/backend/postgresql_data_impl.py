@@ -111,13 +111,19 @@ class PostgreSQLCreatorData(CreatorDataInterface):
         finally:
             session.close()
     
-    async def list_creators(self, limit: Optional[int] = None, offset: int = 0) -> List[Dict[str, Any]]:
+    async def list_creators(self, limit: Optional[int] = None, offset: int = 0, with_content_only: bool = False) -> List[Dict[str, Any]]:
         session = self.connection.get_session()
         try:
-            query = session.query(Creator).offset(offset)
+            if with_content_only:
+                # Only return creators that have at least one content set
+                query = session.query(Creator).join(ContentSet, Creator.creator_id == ContentSet.creator_id).offset(offset)
+            else:
+                # Return all creators
+                query = session.query(Creator).offset(offset)
+            
             if limit:
                 query = query.limit(limit)
-            creators = query.all()
+            creators = query.distinct().all()
             return [creator.to_dict() for creator in creators]
         finally:
             session.close()

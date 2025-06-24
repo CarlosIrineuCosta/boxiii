@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
+import { creatorAPI } from '../services/api'
+import type { Creator } from '../services/api'
 
 export default function GeneratePage() {
   const [formData, setFormData] = useState({
@@ -10,6 +12,27 @@ export default function GeneratePage() {
     style: 'educational'
   })
   const [loading, setLoading] = useState(false)
+  const [creators, setCreators] = useState<Creator[]>([])
+  const [loadingCreators, setLoadingCreators] = useState(true)
+
+  useEffect(() => {
+    fetchCreators()
+  }, [])
+
+  const fetchCreators = async () => {
+    try {
+      setLoadingCreators(true)
+      // Only fetch creators that have content sets for generation
+      const response = await fetch('/api/creators?with_content_only=true')
+      const creatorsData = await response.json()
+      setCreators(creatorsData)
+    } catch (error) {
+      toast.error('Failed to load creators')
+      console.error(error)
+    } finally {
+      setLoadingCreators(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,10 +75,16 @@ export default function GeneratePage() {
             value={formData.creator_id}
             onChange={(e) => setFormData({ ...formData, creator_id: e.target.value })}
             required
+            disabled={loadingCreators}
           >
-            <option value="">Select a creator</option>
-            <option value="ana_contti">Ana Contti</option>
-            <option value="lunar_explorer">Lunar Explorer</option>
+            <option value="">
+              {loadingCreators ? 'Loading creators...' : 'Select a creator'}
+            </option>
+            {creators.map((creator) => (
+              <option key={creator.creator_id} value={creator.creator_id}>
+                {creator.display_name}
+              </option>
+            ))}
           </select>
         </div>
 

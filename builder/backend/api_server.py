@@ -185,11 +185,12 @@ async def export_all_data(
 async def list_creators(
     limit: Optional[int] = None,
     offset: int = 0,
+    with_content_only: bool = False,
     dm: DataManager = Depends(get_data_manager)
 ):
-    """List all creators"""
-    creators = await dm.creators.list_creators(limit=limit, offset=offset)
-    return {"data": creators, "count": len(creators)}
+    """List all creators. with_content_only filters to creators that have at least one content set."""
+    creators = await dm.creators.list_creators(limit=limit, offset=offset, with_content_only=with_content_only)
+    return creators
 
 
 @app.get("/api/creators/{creator_id}")
