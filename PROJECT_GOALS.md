@@ -157,3 +157,49 @@ The platform operates on a hierarchical content model:
 Transform education technology by making high-quality, personalized educational content creation accessible to anyone through AI assistance, while providing learners with an engaging, Netflix-like discovery experience for educational content.
 
 **Ultimate Goal**: Become the leading platform where creators can efficiently produce educational content and learners can discover and consume it in an engaging, personalized way.
+
+## Proposed Upgrades
+
+### AI Model Selection Enhancement
+**Priority**: High  
+**Description**: Add dynamic model selector dropdown in Generate Cards interface
+
+**Current State**: Fixed model configuration in backend code
+- Gemini: `gemini-2.5-flash-lite-preview-06-17` (most cost-effective)
+- Claude: `claude-3-haiku-20240307` (cheapest vs expensive Sonnet 4)  
+- OpenAI: `gpt-4o-mini` (cost-effective GPT-4 class)
+
+**Proposed Implementation**:
+1. **Frontend Model Selector**: Dropdown in Generate Cards page allowing users to choose:
+   - **Gemini Models**: 
+     - `gemini-2.5-flash-lite` (cheapest, fastest)
+     - `gemini-2.5-flash` (balanced performance/cost)
+     - `gemini-2.5-pro` (highest quality, most expensive)
+   - **Claude Models**:
+     - `claude-3-haiku` (cheapest, fast)
+     - `claude-3-sonnet` (balanced)
+     - `claude-3-opus` or `claude-4-sonnet` (premium, expensive)
+   - **OpenAI Models**:
+     - `gpt-4o-mini` (cost-effective)
+     - `gpt-4o` (higher quality, more expensive)
+
+2. **Backend Model Management**: Extend `MODEL_CONFIG` dictionary to support multiple models per provider
+
+3. **Cost Estimation**: Display estimated generation cost based on model selection and card count
+
+4. **User Preferences**: Save user's preferred model selection per creator
+
+**Business Value**: 
+- Allows users to balance cost vs quality based on content importance
+- Premium users can access higher-quality models
+- Provides clear cost transparency
+- Enables tiered pricing strategy
+
+**Technical Requirements**:
+- Update `unified_generator.py` MODEL_CONFIG structure
+- Modify Generation API to accept model parameter
+- Add model selector component to GeneratePage.tsx
+- Implement cost calculation logic
+- Add model preference storage
+
+**Estimated Development Time**: 2-3 days

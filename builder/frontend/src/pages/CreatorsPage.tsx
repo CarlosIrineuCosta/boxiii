@@ -19,7 +19,8 @@ export default function CreatorsPage() {
   const fetchCreators = async () => {
     try {
       setLoading(true);
-      const data = await creatorAPI.getAll();
+      // CRITICAL: Show ALL creators for management (CRUD operations)
+      const data = await creatorAPI.getAll(); // default false = ALL creators
       setCreators(data);
     } catch (error) {
       toast.error('Failed to load creators');

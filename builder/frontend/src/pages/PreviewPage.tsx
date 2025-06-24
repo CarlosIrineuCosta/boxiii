@@ -4,11 +4,13 @@ import {
   PencilIcon, 
   TrashIcon, 
   MagnifyingGlassIcon,
-  FunnelIcon 
+  FunnelIcon,
+  PlusIcon 
 } from '@heroicons/react/24/outline';
 import { contentCardAPI, contentSetAPI, creatorAPI } from '../services/api';
 import type { ContentCard, ContentSet, Creator } from '../services/api';
 import { toast } from 'react-hot-toast';
+import ContentCardModal from '../components/ContentCardModal';
 
 export default function PreviewPage() {
   const [cards, setCards] = useState<ContentCard[]>([]);
@@ -19,6 +21,8 @@ export default function PreviewPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCreator, setFilterCreator] = useState('');
   const [filterSet, setFilterSet] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [editingCard, setEditingCard] = useState<ContentCard | null>(null);
 
   useEffect(() => {
     fetchAllData();
@@ -60,6 +64,44 @@ export default function PreviewPage() {
     }
   };
 
+  const handleSaveCard = async (cardData: Partial<ContentCard>) => {
+    try {
+      if (editingCard) {
+        // Update existing card
+        const updatedCard = await contentCardAPI.update(editingCard.card_id, cardData);
+        setCards(cards.map(card => 
+          card.card_id === editingCard.card_id ? updatedCard : card
+        ));
+        toast.success('Card updated successfully');
+      } else {
+        // Create new card
+        const newCard = await contentCardAPI.create(cardData as Omit<ContentCard, 'card_id' | 'created_at' | 'updated_at'>);
+        setCards([...cards, newCard]);
+        toast.success('Card created successfully');
+      }
+      setShowModal(false);
+      setEditingCard(null);
+    } catch (error) {
+      toast.error(editingCard ? 'Failed to update card' : 'Failed to create card');
+      throw error; // Re-throw to let modal handle the error
+    }
+  };
+
+  const handleCreateCard = () => {
+    setEditingCard(null);
+    setShowModal(true);
+  };
+
+  const handleEditCard = (card: ContentCard) => {
+    setEditingCard(card);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setEditingCard(null);
+  };
+
   // Helper functions to get names
   const getCreatorName = (creatorId: string) => {
     const creator = creators.find(c => c.creator_id === creatorId);
@@ -98,10 +140,18 @@ export default function PreviewPage() {
             Quick inspection and management of generated content cards
           </p>
         </div>
-        <div className="mt-4 sm:mt-0">
+        <div className="mt-4 sm:mt-0 flex items-center space-x-3">
           <span className="text-sm text-gray-500">
             {filteredCards.length} of {cards.length} cards
           </span>
+          <button
+            type="button"
+            onClick={handleCreateCard}
+            className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            <PlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
+            Add Card Manually
+          </button>
         </div>
       </div>
 
@@ -207,7 +257,7 @@ export default function PreviewPage() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        toast.info('Edit functionality coming soon!');
+                        handleEditCard(card);
                       }}
                       className="text-gray-400 hover:text-gray-600"
                     >
@@ -282,6 +332,39 @@ export default function PreviewPage() {
                   </div>
                 )}
 
+                {selectedCard.media && selectedCard.media.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900 mb-2">Media Links</h4>
+                    <div className="space-y-2">
+                      {selectedCard.media.map((media, index) => (
+                        <div key={index} className="bg-gray-50 p-3 rounded flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                              {media.type?.toUpperCase() || 'LINK'}
+                            </span>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {media.title || 'Untitled'}
+                              </div>
+                              <div className="text-xs text-gray-500 truncate max-w-xs">
+                                {media.url}
+                              </div>
+                            </div>
+                          </div>
+                          <a
+                            href={media.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 text-xs"
+                          >
+                            Open
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {selectedCard.domain_data && (
                   <div>
                     <h4 className="text-sm font-medium text-gray-900 mb-2">Domain Info</h4>
@@ -300,7 +383,7 @@ export default function PreviewPage() {
                     </div>
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => toast.info('Edit functionality coming soon!')}
+                        onClick={() => handleEditCard(selectedCard)}
                         className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
                         <PencilIcon className="h-3 w-3 mr-1" />
@@ -326,6 +409,16 @@ export default function PreviewPage() {
           </div>
         </div>
       </div>
+
+      {/* Content Card Modal */}
+      <ContentCardModal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        onSave={handleSaveCard}
+        card={editingCard}
+        contentSets={sets}
+        creators={creators}
+      />
     </div>
   );
 }

@@ -15,20 +15,18 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch all data
-        const creatorsResponse = await fetch('/api/creators')
-        const setsResponse = await fetch('/api/sets')
-        const cardsResponse = await fetch('/api/cards')
-        
-        const creators = await creatorsResponse.json()
-        const sets = await setsResponse.json()
-        const cards = await cardsResponse.json()
+        // Fetch all data using API service layer
+        const [creators, sets, cards] = await Promise.all([
+          creatorAPI.getAll(),
+          contentSetAPI.getAll(),
+          contentCardAPI.getAll()
+        ])
 
         // Update stats in the correct order: Creators, Boxes, Total Cards
         setStats([
-          { name: 'Creators', value: (creators?.data?.length || creators?.length || 0).toString(), icon: UserGroupIcon, color: 'bg-green-500', link: '/creators' },
-          { name: 'Boxes', value: (sets?.data?.length || sets?.length || 0).toString(), icon: DocumentTextIcon, color: 'bg-blue-500', link: '/boxes' },
-          { name: 'Total Cards', value: (cards?.data?.length || cards?.length || 0).toString(), icon: SparklesIcon, color: 'bg-purple-500', link: '/cards' },
+          { name: 'Creators', value: (creators?.length || 0).toString(), icon: UserGroupIcon, color: 'bg-green-500', link: '/creators' },
+          { name: 'Boxes', value: (sets?.length || 0).toString(), icon: DocumentTextIcon, color: 'bg-blue-500', link: '/boxes' },
+          { name: 'Total Cards', value: (cards?.length || 0).toString(), icon: SparklesIcon, color: 'bg-purple-500', link: '/cards' },
         ])
 
         // Create recent activity from real data
@@ -40,7 +38,7 @@ export default function DashboardPage() {
         const activity = sets.map((set: any, index: number) => ({
           id: index + 1,
           creator: creatorsMap[set.creator_id] || 'Unknown Creator',
-          contentSet: set.title.length > 50 ? set.title.substring(0, 47) + '...' : set.title,
+          box: set.title.length > 50 ? set.title.substring(0, 47) + '...' : set.title,
           cards: set.card_count || 0,
           date: new Date(set.created_at).toLocaleDateString()
         }))
@@ -98,7 +96,7 @@ export default function DashboardPage() {
                 <div className="px-4 py-4 sm:px-6">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <p className="truncate text-sm font-medium text-indigo-600">{activity.contentSet}</p>
+                      <p className="truncate text-sm font-medium text-indigo-600">{activity.box}</p>
                       <p className="mt-1 text-sm text-gray-500">
                         by {activity.creator} • {activity.cards} cards
                       </p>
@@ -126,8 +124,8 @@ export default function DashboardPage() {
               <SparklesIcon className="h-10 w-10 text-indigo-600" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-gray-900">Generate New Content</p>
-              <p className="text-sm text-gray-500">Create AI-powered content sets</p>
+              <p className="text-sm font-medium text-gray-900">Generate Cards</p>
+              <p className="text-sm text-gray-500">Create AI-powered content boxes</p>
             </div>
           </Link>
           
@@ -153,7 +151,7 @@ export default function DashboardPage() {
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-gray-900">Manage Boxes</p>
-              <p className="text-sm text-gray-500">View and organize content sets</p>
+              <p className="text-sm text-gray-500">View and organize content boxes</p>
             </div>
           </Link>
 

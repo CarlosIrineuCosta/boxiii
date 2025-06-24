@@ -33,9 +33,26 @@ async function apiRequest<T>(
 
 // Creator API endpoints
 export const creatorAPI = {
-  // Get all creators
-  getAll: async () => {
-    return apiRequest<Creator[]>('/creators');
+  /**
+   * Get all creators with optional filtering
+   * 
+   * CRITICAL SYSTEM DESIGN NOTES:
+   * - withContentOnly=false (DEFAULT): Shows ALL creators
+   *   USE FOR: Generate Cards page (allows content creation for new creators)
+   *   USE FOR: Creators management page (shows all for CRUD operations)
+   *   USE FOR: Most scenarios where you need complete creator list
+   * 
+   * - withContentOnly=true: Shows ONLY creators with existing content sets
+   *   USE FOR: Analytics/reporting where you only care about creators with content
+   *   USE FOR: Content browsing where empty creators aren't relevant
+   *   AVOID: Generate Cards page (blocks content creation for new creators)
+   * 
+   * @param withContentOnly - Filter to only creators with existing content sets
+   * @returns Promise<Creator[]> - Array of creator objects
+   */
+  getAll: async (withContentOnly: boolean = false) => {
+    const params = withContentOnly ? '?with_content_only=true' : '';
+    return apiRequest<Creator[]>(`/creators${params}`);
   },
 
   // Get a single creator by ID
@@ -104,11 +121,13 @@ export const creatorAPI = {
 // Content Set API endpoints
 export const contentSetAPI = {
   getAll: async () => {
-    return apiRequest<ContentSet[]>('/sets');
+    const response = await apiRequest<{data: ContentSet[], count: number}>('/sets');
+    return response.data;
   },
 
   getByCreator: async (creatorId: string) => {
-    return apiRequest<ContentSet[]>(`/sets?creator_id=${creatorId}`);
+    const response = await apiRequest<{data: ContentSet[], count: number}>(`/sets?creator_id=${creatorId}`);
+    return response.data;
   },
 
   create: async (contentSet: Omit<ContentSet, 'set_id' | 'created_at' | 'updated_at'>) => {
@@ -135,11 +154,13 @@ export const contentSetAPI = {
 // Content Card API endpoints
 export const contentCardAPI = {
   getAll: async () => {
-    return apiRequest<ContentCard[]>('/cards');
+    const response = await apiRequest<{data: ContentCard[], count: number}>('/cards');
+    return response.data;
   },
 
   getBySet: async (setId: string) => {
-    return apiRequest<ContentCard[]>(`/cards?set_id=${setId}`);
+    const response = await apiRequest<{data: ContentCard[], count: number}>(`/cards?set_id=${setId}`);
+    return response.data;
   },
 
   create: async (card: Omit<ContentCard, 'card_id' | 'created_at' | 'updated_at'>) => {

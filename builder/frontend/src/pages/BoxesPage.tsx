@@ -10,6 +10,7 @@ import {
 import { contentSetAPI, creatorAPI } from '../services/api';
 import type { ContentSet, Creator } from '../services/api';
 import { toast } from 'react-hot-toast';
+import ContentSetModal from '../components/ContentSetModal';
 
 export default function BoxesPage() {
   const [contentSets, setContentSets] = useState<ContentSet[]>([]);
@@ -18,6 +19,10 @@ export default function BoxesPage() {
   const [selectedSet, setSelectedSet] = useState<ContentSet | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCreator, setFilterCreator] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [editingSet, setEditingSet] = useState<ContentSet | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletingSet, setDeletingSet] = useState<ContentSet | null>(null);
 
   useEffect(() => {
     fetchAllData();
@@ -27,14 +32,11 @@ export default function BoxesPage() {
     try {
       setLoading(true);
       
-      // Fetch all data in parallel
-      const [setsResponse, creatorsResponse] = await Promise.all([
-        fetch('/api/sets'),
-        fetch('/api/creators')
+      // Fetch all data in parallel using API service layer
+      const [setsData, creatorsData] = await Promise.all([
+        contentSetAPI.getAll(),
+        creatorAPI.getAll() // CRITICAL: Show ALL creators for content set assignment
       ]);
-
-      const setsData = await setsResponse.json();
-      const creatorsData = await creatorsResponse.json();
 
       setContentSets(setsData);
       setCreators(creatorsData);
@@ -46,18 +48,64 @@ export default function BoxesPage() {
     }
   };
 
-  const handleDeleteSet = async (setId: string) => {
-    if (!confirm('Are you sure you want to delete this content set? This will also delete all associated cards.')) return;
+  const handleDeleteSet = (set: ContentSet) => {
+    setDeletingSet(set);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingSet) return;
     
     try {
-      await contentSetAPI.delete(setId);
-      setContentSets(contentSets.filter(set => set.set_id !== setId));
+      await contentSetAPI.delete(deletingSet.set_id);
+      setContentSets(contentSets.filter(set => set.set_id !== deletingSet.set_id));
       setSelectedSet(null);
-      toast.success('Content set deleted successfully');
+      toast.success('Box deleted successfully');
     } catch (error) {
-      toast.error('Failed to delete content set');
+      toast.error('Failed to delete box');
       console.error(error);
+    } finally {
+      setShowDeleteModal(false);
+      setDeletingSet(null);
     }
+  };
+
+  const handleSaveContentSet = async (contentSetData: Partial<ContentSet>) => {
+    try {
+      if (editingSet) {
+        // Update existing content set
+        const updatedSet = await contentSetAPI.update(editingSet.set_id, contentSetData);
+        setContentSets(contentSets.map(set => 
+          set.set_id === editingSet.set_id ? updatedSet : set
+        ));
+        toast.success('Box updated successfully');
+      } else {
+        // Create new content set
+        const newSet = await contentSetAPI.create(contentSetData as Omit<ContentSet, 'set_id' | 'created_at' | 'updated_at'>);
+        setContentSets([...contentSets, newSet]);
+        toast.success('Box created successfully');
+      }
+      setShowModal(false);
+      setEditingSet(null);
+    } catch (error) {
+      toast.error(editingSet ? 'Failed to update content set' : 'Failed to create content set');
+      throw error; // Re-throw to let modal handle the error
+    }
+  };
+
+  const handleCreateSet = () => {
+    setEditingSet(null);
+    setShowModal(true);
+  };
+
+  const handleEditSet = (contentSet: ContentSet) => {
+    setEditingSet(contentSet);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setEditingSet(null);
   };
 
   // Helper function to get creator name
@@ -87,7 +135,7 @@ export default function BoxesPage() {
     <div className="space-y-6">
       <div className="sm:flex sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Content Boxes</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Boxes</h1>
           <p className="mt-1 text-sm text-gray-600">
             Manage your content sets and collections
           </p>
@@ -96,10 +144,10 @@ export default function BoxesPage() {
           <button
             type="button"
             className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            onClick={() => toast.info('Create content set functionality coming soon!')}
+            onClick={handleCreateSet}
           >
             <PlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
-            New Content Set
+            New Box
           </button>
         </div>
       </div>
@@ -136,13 +184,13 @@ export default function BoxesPage() {
         </div>
       </div>
 
-      {/* Content Sets Grid and Detail View */}
+      {/* Boxes Grid and Detail View */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Content Sets List */}
+        {/* Boxes List */}
         <div className="bg-white shadow rounded-lg">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-medium text-gray-900">
-              Content Sets ({filteredSets.length})
+              Boxes ({filteredSets.length})
             </h2>
           </div>
           <div className="divide-y divide-gray-200 max-h-96 overflow-y-auto">
@@ -186,7 +234,7 @@ export default function BoxesPage() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        toast.info('Edit functionality coming soon!');
+                        handleEditSet(set);
                       }}
                       className="text-gray-400 hover:text-gray-600"
                     >
@@ -195,7 +243,7 @@ export default function BoxesPage() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDeleteSet(set.set_id);
+                        handleDeleteSet(set);
                       }}
                       className="text-red-400 hover:text-red-600"
                     >
@@ -208,11 +256,11 @@ export default function BoxesPage() {
           </div>
         </div>
 
-        {/* Content Set Detail View */}
+        {/* Box Detail View */}
         <div className="bg-white shadow rounded-lg">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-medium text-gray-900">
-              {selectedSet ? 'Content Set Details' : 'Select a content set to view details'}
+              {selectedSet ? 'Box Details' : 'Select a box to view details'}
             </h2>
           </div>
           <div className="p-6">
@@ -259,7 +307,7 @@ export default function BoxesPage() {
                 </div>
 
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">Content Style</h4>
+                  <h4 className="text-sm font-medium text-gray-900 mb-2">Style</h4>
                   <p className="text-sm text-gray-700">{selectedSet.content_style}</p>
                 </div>
 
@@ -282,14 +330,21 @@ export default function BoxesPage() {
                     </div>
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => toast.info('Edit functionality coming soon!')}
+                        onClick={() => window.open(`/cards?set_id=${selectedSet.set_id}`, '_blank')}
+                        className="inline-flex items-center px-3 py-1.5 border border-green-300 shadow-sm text-xs font-medium rounded text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                      >
+                        <PlusIcon className="h-3 w-3 mr-1" />
+                        Add Cards
+                      </button>
+                      <button
+                        onClick={() => handleEditSet(selectedSet)}
                         className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
                         <PencilIcon className="h-3 w-3 mr-1" />
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDeleteSet(selectedSet.set_id)}
+                        onClick={() => handleDeleteSet(selectedSet)}
                         className="inline-flex items-center px-3 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                       >
                         <TrashIcon className="h-3 w-3 mr-1" />
@@ -302,12 +357,54 @@ export default function BoxesPage() {
             ) : (
               <div className="text-center text-gray-500">
                 <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                <p>Select a content set from the list to view its details</p>
+                <p>Select a box from the list to view its details</p>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="mt-3 text-center">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                <TrashIcon className="h-6 w-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mt-4">Delete Box</h3>
+              <div className="mt-2 px-7 py-3">
+                <p className="text-sm text-gray-500">
+                  Are you sure you want to delete "{deletingSet?.title}"? This will also delete all {deletingSet?.card_count || 0} associated cards. This action cannot be undone.
+                </p>
+              </div>
+              <div className="flex justify-center space-x-4 mt-4">
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  Delete Box
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Box Modal */}
+      <ContentSetModal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        onSave={handleSaveContentSet}
+        contentSet={editingSet}
+        creators={creators}
+      />
     </div>
   );
 }

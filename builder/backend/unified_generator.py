@@ -49,6 +49,15 @@ except ImportError:
         THEMATIC = "thematic"
 
 
+# MODEL CONFIGURATION - Easy to update when models change
+MODEL_CONFIG = {
+    "GEMINI_MODEL": "gemini-2.5-flash-lite-preview-06-17",  # Most cost-effective (2024/2025)
+    "CLAUDE_MODEL": "claude-3-haiku-20240307",              # Cheapest Claude option (vs expensive Sonnet 4)
+    "OPENAI_MODEL": "gpt-4o-mini",                          # Cost-effective GPT-4 class model
+    "GEMINI_BASE_URL": "https://generativelanguage.googleapis.com/v1beta/openai/"  # 2024 OpenAI-compatible endpoint
+}
+
+
 class LLMProvider(Enum):
     """Supported LLM providers"""
     ANTHROPIC = "anthropic"
@@ -117,8 +126,8 @@ class UnifiedContentGenerator:
                 # Using AsyncAnthropic for consistency with OpenAI's async client
                 # For synchronous calls, one would typically wrap async calls or use anthropic.Anthropic()
                 self.providers[LLMProvider.ANTHROPIC] = anthropic.AsyncAnthropic(api_key=api_key)
-                self.provider_configs[LLMProvider.ANTHROPIC] = {"model": "claude-3-haiku-20240307"}
-                print("✅ Anthropic Claude provider initialized (claude-3-haiku).")
+                self.provider_configs[LLMProvider.ANTHROPIC] = {"model": MODEL_CONFIG["CLAUDE_MODEL"]}
+                print(f"✅ Anthropic Claude provider initialized with {MODEL_CONFIG['CLAUDE_MODEL']}.")
             except Exception as e:
                 print(f"❌ Anthropic setup failed: {e}")
                 traceback.print_exc()
@@ -129,11 +138,11 @@ class UnifiedContentGenerator:
             try:
                 self.providers[LLMProvider.GEMINI_OPENAI] = AsyncOpenAI(
                     api_key=api_key,
-                    base_url="https://generativelanguage.googleapis.com/v1beta" # Corrected base URL structure
+                    base_url=MODEL_CONFIG["GEMINI_BASE_URL"]
                 )
-                # Model will be specified per call, e.g., "models/gemini-1.5-flash-latest"
-                self.provider_configs[LLMProvider.GEMINI_OPENAI] = {"model_prefix": "models/"} # Store prefix
-                print("✅ Gemini (OpenAI-compatible API) provider initialized.")
+                # Using current 2024/2025 model configuration
+                self.provider_configs[LLMProvider.GEMINI_OPENAI] = {"model": MODEL_CONFIG["GEMINI_MODEL"]}
+                print(f"✅ Gemini (OpenAI-compatible API) provider initialized with {MODEL_CONFIG['GEMINI_MODEL']}.")
             except Exception as e:
                 print(f"❌ Gemini (OpenAI-compatible API) setup failed: {e}")
                 traceback.print_exc()
@@ -142,8 +151,8 @@ class UnifiedContentGenerator:
         if OPENAI_AVAILABLE and api_key and api_key != "your-openai-api-key-here":
             try:
                 self.providers[LLMProvider.OPENAI] = AsyncOpenAI(api_key=api_key)
-                self.provider_configs[LLMProvider.OPENAI] = {"model": "gpt-3.5-turbo"} # Or "gpt-4o-mini"
-                print("✅ OpenAI provider initialized (gpt-3.5-turbo).")
+                self.provider_configs[LLMProvider.OPENAI] = {"model": MODEL_CONFIG["OPENAI_MODEL"]}
+                print(f"✅ OpenAI provider initialized with {MODEL_CONFIG['OPENAI_MODEL']}.")
             except Exception as e:
                 print(f"❌ OpenAI setup failed: {e}")
                 traceback.print_exc()
@@ -218,17 +227,16 @@ class UnifiedContentGenerator:
 
         try:
             if current_provider == LLMProvider.ANTHROPIC:
-                model_to_use = provider_config.get("model", "claude-3-haiku-20240307")
+                model_to_use = provider_config.get("model", MODEL_CONFIG["CLAUDE_MODEL"])
                 return await self._call_anthropic_api(client_instance, model_to_use, system_prompt, prompt_text, max_tokens, temperature)
             
             elif current_provider == LLMProvider.GEMINI_OPENAI:
-                # For Gemini via OpenAI API, model name needs prefix, e.g., "models/gemini-1.5-flash-latest"
-                model_prefix = provider_config.get("model_prefix", "models/")
-                model_to_use = f"{model_prefix}gemini-1.5-flash-latest" # Specify a default model
+                # Use configured Gemini model
+                model_to_use = provider_config.get("model", MODEL_CONFIG["GEMINI_MODEL"])
                 return await self._call_openai_compatible_api(client_instance, model_to_use, system_prompt, prompt_text, max_tokens, temperature)
 
             elif current_provider == LLMProvider.OPENAI:
-                model_to_use = provider_config.get("model", "gpt-3.5-turbo")
+                model_to_use = provider_config.get("model", MODEL_CONFIG["OPENAI_MODEL"])
                 return await self._call_openai_compatible_api(client_instance, model_to_use, system_prompt, prompt_text, max_tokens, temperature)
             
             else:

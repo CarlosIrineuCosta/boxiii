@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
-import { creatorAPI } from '../services/api'
+import { creatorAPI, generationAPI } from '../services/api'
 import type { Creator } from '../services/api'
 
 export default function GeneratePage() {
@@ -22,9 +22,10 @@ export default function GeneratePage() {
   const fetchCreators = async () => {
     try {
       setLoadingCreators(true)
-      // Only fetch creators that have content sets for generation
-      const response = await fetch('/api/creators?with_content_only=true')
-      const creatorsData = await response.json()
+      // CRITICAL: Fetch ALL creators for generation - this allows content creation for NEW creators
+      // If we filtered to only creators with existing content, users would be blocked from 
+      // generating content for newly created creators (chicken-and-egg problem)
+      const creatorsData = await creatorAPI.getAll(false) // false = show ALL creators
       setCreators(creatorsData)
     } catch (error) {
       toast.error('Failed to load creators')
@@ -39,16 +40,36 @@ export default function GeneratePage() {
     setLoading(true)
 
     try {
-      // TODO: Implement actual API call
-      toast.success('Content generation started!')
+      toast.loading('Generating content with AI...', { id: 'generation' })
       
-      // Simulate API delay
-      setTimeout(() => {
-        setLoading(false)
-        toast.success('Content generated successfully!')
-      }, 3000)
-    } catch (error) {
-      toast.error('Generation failed')
+      const result = await generationAPI.generateContent({
+        creator_id: formData.creator_id,
+        topic: formData.topic,
+        llm_provider: formData.provider,
+        num_cards: formData.card_count,
+        style: formData.style
+      })
+
+      if (result.success) {
+        toast.success(
+          `🎉 ${result.message}! Generated ${result.cards_generated} cards.`,
+          { id: 'generation', duration: 5000 }
+        )
+        
+        // Redirect to Cards tab with the new set
+        setTimeout(() => {
+          window.location.href = `/cards?set_id=${result.set_id}`
+        }, 2000)
+      } else {
+        toast.error(result.error || 'Generation failed', { id: 'generation' })
+      }
+    } catch (error: any) {
+      console.error('Generation error:', error)
+      toast.error(
+        error.message || 'Failed to generate content. Please check your AI provider settings.',
+        { id: 'generation' }
+      )
+    } finally {
       setLoading(false)
     }
   }
@@ -56,9 +77,9 @@ export default function GeneratePage() {
   return (
     <div className="max-w-3xl">
       <div>
-        <h2 className="text-2xl font-bold leading-7 text-gray-900">Generate Content</h2>
+        <h2 className="text-2xl font-bold leading-7 text-gray-900">Generate Cards</h2>
         <p className="mt-1 text-sm leading-6 text-gray-600">
-          Use AI to generate educational content sets
+          Use AI to generate educational content cards for your creators
         </p>
       </div>
 
@@ -188,7 +209,7 @@ export default function GeneratePage() {
             disabled={loading}
             className="rounded-md bg-indigo-600 px-8 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
           >
-            {loading ? 'Generating...' : 'Generate Content'}
+            {loading ? 'Generating...' : 'Generate Cards'}
           </button>
         </div>
       </form>
