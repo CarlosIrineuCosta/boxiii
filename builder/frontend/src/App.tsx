@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import CreatorsPage from './pages/CreatorsPage'
 import GeneratePage from './pages/GeneratePage'
+import BoxesPage from './pages/BoxesPage'
 import PreviewPage from './pages/PreviewPage'
 import Layout from './components/Layout'
 
@@ -20,9 +21,12 @@ function App() {
         <Route element={isAuthenticated ? <Layout /> : <Navigate to="/login" />}>
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/creators" element={<CreatorsPage />} />
           <Route path="/generate" element={<GeneratePage />} />
-          <Route path="/preview" element={<PreviewPage />} />
+          <Route path="/creators" element={<CreatorsPage />} />
+          <Route path="/boxes" element={<BoxesPage />} />
+          <Route path="/cards" element={<PreviewPage />} />
+          {/* Keep legacy preview route for compatibility */}
+          <Route path="/preview" element={<Navigate to="/cards" />} />
         </Route>
       </Routes>
     </Router>

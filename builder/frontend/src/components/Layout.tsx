@@ -3,7 +3,8 @@ import {
   HomeIcon, 
   UserGroupIcon, 
   SparklesIcon,
-  EyeIcon,
+  DocumentTextIcon,
+  RectangleStackIcon,
   ArrowRightOnRectangleIcon 
 } from '@heroicons/react/24/outline'
 
@@ -12,9 +13,10 @@ export default function Layout() {
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-    { name: 'Creators', href: '/creators', icon: UserGroupIcon },
     { name: 'Generate', href: '/generate', icon: SparklesIcon },
-    { name: 'Preview', href: '/preview', icon: EyeIcon },
+    { name: 'Creators', href: '/creators', icon: UserGroupIcon },
+    { name: 'Boxes', href: '/boxes', icon: DocumentTextIcon },
+    { name: 'Cards', href: '/cards', icon: RectangleStackIcon },
   ]
 
   const isActive = (path: string) => location.pathname === path
