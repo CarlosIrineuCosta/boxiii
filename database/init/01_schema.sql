@@ -8,8 +8,6 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE creators (
     creator_id VARCHAR(255) PRIMARY KEY,
     display_name VARCHAR(255) NOT NULL,
-    platform VARCHAR(50) NOT NULL,
-    platform_handle VARCHAR(255) NOT NULL,
     avatar_url TEXT,
     banner_url TEXT,
     description TEXT,
@@ -20,7 +18,8 @@ CREATE TABLE creators (
     expertise_areas TEXT[],
     content_style VARCHAR(50) DEFAULT 'educational',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    platforms JSONB DEFAULT '[]' -- Array of platform objects
 );
 
 -- Content Sets table (stable schema)
@@ -72,7 +71,6 @@ CREATE TABLE content_cards (
 );
 
 -- Indexes for performance
-CREATE INDEX idx_creators_platform ON creators(platform);
 CREATE INDEX idx_creators_categories ON creators USING GIN(categories);
 CREATE INDEX idx_creators_verified ON creators(verified);
 

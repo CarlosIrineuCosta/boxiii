@@ -121,7 +121,7 @@ project-root/
 
 ## Boxiii Development Plan
 
-### Current Status (2025-06-24)
+### Current Status (2025-06-25)
 - ✅ Database: PostgreSQL with JSONB unified architecture
 - ✅ Creator Management: Full CRUD interface implemented
 - ✅ Builder Frontend: React + TypeScript with API integration
@@ -130,6 +130,9 @@ project-root/
 - ✅ Complete CRUD: Full REST API endpoints for all resources
 - ✅ UI/UX: Custom modals, consistent "Boxes" terminology
 - ✅ API Service Layer: Unified, consistent API calls across frontend
+- ✅ VPS Deployment: Successfully deployed to Hostinger VPS (v0.0.1-alpha)
+- 🚨 Database Schema: Critical mismatch between repository and working schema (see DATABASE_SCHEMA_CRITICAL_ISSUE.md)
+- 📋 CI/CD: Planning phase, implementation roadmap created (see CI_CD_IMPLEMENTATION_PLAN.md)
 
 ### Session Summary (2025-06-24)
 
@@ -196,13 +199,20 @@ project-root/
    - ✅ Verify complete system workflows
    - ✅ End-to-end testing
 
-### Phase 2: Alpha Production Preparation
+### Phase 2.5: Production Infrastructure (IN PROGRESS)
 
-#### Deployment Considerations:
-- **Platform**: Cloudflare Pages/Workers
-- **Backend**: Consider Cloudflare Workers for API
-- **Database**: Start with D1 (Cloudflare's SQLite) or MongoDB Atlas
-- **CDN**: Cloudflare for static assets
+#### Current Deployment Status:
+- ✅ **VPS**: Deployed to Hostinger VPS with Docker Compose
+- ✅ **Reverse Proxy**: Nginx configured for frontend/backend routing
+- ✅ **Database**: PostgreSQL in production with data persistence
+- 🚨 **Schema Issue**: Repository schema doesn't match working database
+- 📋 **CI/CD**: Implementation plan created, GitHub Actions pending
+
+#### Deployment Locations:
+- **Production VPS**: Hostinger server (manual deployment via SSH)
+- **GitHub Repository**: github.com/your-username/boxiii
+- **Local Development**: WSL2 Ubuntu on Windows 11
+- **Future Staging**: TBD (considering second VPS or Docker Swarm)
 
 #### Authentication & User Management:
 - [ ] Implement user registration/login
@@ -229,6 +239,19 @@ project-root/
 
 ### Technical Debt & Improvements
 
+#### Critical Issues (MUST FIX):
+- [ ] Fix database schema mismatch in `database/init/01_schema.sql`
+- [ ] Review and update database default values (see DATABASE_DEFAULTS_REVIEW_NEEDED.md)
+- [ ] Remove incorrect `database/migration_platform_to_platforms.sql`
+
+#### CI/CD Implementation (HIGH PRIORITY):
+- [ ] Set up GitHub Actions for CI/CD
+- [ ] Configure GitHub Container Registry
+- [ ] Implement database migrations with Alembic
+- [ ] Create staging environment
+- [ ] Add automated testing pipeline
+
+#### Code Quality:
 - [ ] Add comprehensive error handling
 - [ ] Implement logging system
 - [ ] Add monitoring (Sentry, DataDog)
@@ -236,21 +259,90 @@ project-root/
 - [ ] Security audit
 - [ ] Documentation updates
 
-### Environment Variables Needed
+### Environment Variables & Configuration
 
+#### Current Production Environment (.env.prod):
 ```bash
-# Builder Backend
-JWT_SECRET=
-GEMINI_API_KEY=
-CLAUDE_API_KEY=
-OPENAI_API_KEY=
+# Database
+DB_USER=boxiii
+DB_PASSWORD=[CONFIGURED]
+DB_NAME=boxiii_db
+DB_HOST=db
+DB_PORT=5432
 
-# Future Production
-STRIPE_API_KEY=
-PAYPAL_CLIENT_ID=
-PAYPAL_CLIENT_SECRET=
-MERCADOPAGO_ACCESS_TOKEN=
-MONGODB_URI=
-CLOUDFLARE_ACCOUNT_ID=
-CLOUDFLARE_API_TOKEN=
+# Security
+JWT_SECRET=[CONFIGURED]
+
+# AI APIs
+GEMINI_API_KEY=[CONFIGURED]
+CLAUDE_API_KEY=[CONFIGURED]
+OPENAI_API_KEY=[CONFIGURED]
+
+# Email (Future)
+EMAIL_HOST=
+EMAIL_PORT=
+EMAIL_USER=
+EMAIL_PASSWORD=
+```
+
+#### CI/CD Secrets (To Configure in GitHub):
+```bash
+# VPS Access
+VPS_HOST=
+VPS_USER=
+VPS_SSH_KEY=
+
+# Container Registry
+GITHUB_TOKEN=[AUTO]
+
+# Environment-specific
+DB_PASSWORD_STAGING=
+DB_PASSWORD_PRODUCTION=
+JWT_SECRET_STAGING=
+JWT_SECRET_PRODUCTION=
+```
+
+### Versioning & Branching Strategy
+
+#### Current Version: 0.0.1-alpha
+
+#### Branching Model (Simplified Git Flow):
+- `main` → Production releases (protected)
+- `develop` → Integration branch
+- `feature/*` → New features
+- `bugfix/*` → Bug fixes
+- `hotfix/*` → Emergency production fixes
+- `release/*` → Release preparation
+
+#### Version Format:
+```
+MAJOR.MINOR.PATCH-STAGE
+
+Examples:
+0.0.1-alpha   ← Current version
+0.1.0-beta    ← Feature complete
+1.0.0         ← First stable release
+```
+
+### Quick Reference Commands
+
+#### Local Development:
+```bash
+cd ~/projects/boxiii
+source venv/bin/activate
+docker-compose up -d
+```
+
+#### Production Deployment (Current - Manual):
+```bash
+ssh user@vps-host
+cd /var/www/boxiii
+./deploy-vps.sh
+```
+
+#### Future CI/CD Deployment:
+```bash
+# Automatic on push to main
+# Manual via GitHub Actions:
+gh workflow run deploy.yml -f environment=production
 ```
