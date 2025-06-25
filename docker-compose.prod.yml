@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # Production PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: boxiii-db-prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: boxiii
+      POSTGRES_USER: boxiii_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - boxiii-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U boxiii_user -d boxiii"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Builder Backend API - Production Build
+  builder-backend:
+    build: 
+      context: ./builder
+      dockerfile: Dockerfile.prod
+    container_name: boxiii-builder-backend-prod
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://boxiii_user:${DB_PASSWORD}@postgres:5432/boxiii
+      - JWT_SECRET=${JWT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ENVIRONMENT=production
+    volumes:
+      - ./shared/uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - boxiii-network
+
+  # Builder Frontend - Production Build with Nginx
+  builder-frontend:
+    build: 
+      context: ./builder/frontend
+      dockerfile: Dockerfile.prod
+    container_name: boxiii-builder-frontend-prod
+    restart: unless-stopped
+    environment:
+      - VITE_API_URL=/api
+    depends_on:
+      - builder-backend
+    networks:
+      - boxiii-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: boxiii-nginx-prod
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - builder-frontend
+      - builder-backend
+    networks:
+      - boxiii-network
+
+volumes:
+  postgres_data:
+
+networks:
+  boxiii-network:
+    driver: bridge
