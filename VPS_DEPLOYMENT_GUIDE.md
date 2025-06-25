@@ -1,17 +1,17 @@
 # Boxiii VPS Deployment Guide
 
-## 🎯 Quick Deployment for Hostinger VPS
+## Quick Deployment for Hostinger VPS
 
 This guide will deploy your Boxiii admin platform to your Hostinger VPS with full database functionality.
 
-## 📋 Prerequisites
+## Prerequisites
 
 1. **Hostinger VPS** with root access
 2. **Domain name** pointed to your VPS IP
 3. **AI API Keys** (Gemini, Claude, OpenAI)
 4. **SSH access** to your VPS
 
-## 🚀 One-Command Deployment
+## One-Command Deployment
 
 ### Step 1: Connect to Your VPS
 ```bash
@@ -36,7 +36,7 @@ chmod +x deploy-vps.sh
 ./deploy-vps.sh
 ```
 
-## ⚙️ Configuration Setup
+## Configuration Setup
 
 ### Step 3: Configure Environment Variables
 After deployment, edit your production environment:
@@ -69,7 +69,7 @@ ADMIN_EMAIL=your-email@domain.com
 docker-compose -f docker-compose.prod.yml restart
 ```
 
-## 🌐 Domain & SSL Setup
+## Domain & SSL Setup
 
 ### Step 5: Point Domain to VPS
 In your domain registrar (Hostinger, Cloudflare, etc.):
@@ -88,7 +88,7 @@ certbot --nginx -d yourdomain.com -d www.yourdomain.com
 certbot renew --dry-run
 ```
 
-## 🎉 Access Your Application
+## Access Your Application
 
 After deployment and domain setup:
 
@@ -96,7 +96,7 @@ After deployment and domain setup:
 - **API Documentation**: `https://yourdomain.com/api/docs`
 - **Health Check**: `https://yourdomain.com/health`
 
-## 🔧 Management Commands
+## Management Commands
 
 ### View Application Status
 ```bash
@@ -140,14 +140,14 @@ docker-compose -f docker-compose.prod.yml restart builder-backend
 ls -la /opt/boxiii/backups/
 ```
 
-## 🛡️ Security Features
+## Security Features
 
 ### Automatic Security Setup
-- ✅ **Firewall**: UFW configured (SSH, HTTP, HTTPS only)
-- ✅ **Rate Limiting**: API and auth endpoint protection
-- ✅ **Security Headers**: XSS, CSRF, clickjacking protection
-- ✅ **HTTPS Redirect**: Automatic HTTP to HTTPS redirect
-- ✅ **Log Rotation**: Prevents disk space issues
+- [OK] **Firewall**: UFW configured (SSH, HTTP, HTTPS only)
+- [OK] **Rate Limiting**: API and auth endpoint protection
+- [OK] **Security Headers**: XSS, CSRF, clickjacking protection
+- [OK] **HTTPS Redirect**: Automatic HTTP to HTTPS redirect
+- [OK] **Log Rotation**: Prevents disk space issues
 
 ### Additional Security (Recommended)
 ```bash
@@ -161,7 +161,7 @@ apt install fail2ban
 systemctl enable fail2ban
 ```
 
-## 📊 Monitoring & Maintenance
+## Monitoring & Maintenance
 
 ### Health Checks
 ```bash
@@ -193,7 +193,7 @@ docker logs boxiii-nginx-prod
 - **Location**: `/opt/boxiii/backups/`
 - **Contents**: Database + uploaded files
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -249,7 +249,7 @@ docker exec -i boxiii-db-prod psql -U boxiii_user -d boxiii < db_backup_YYYYMMDD
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
-## 💰 Cost Optimization
+## Cost Optimization
 
 ### Hostinger VPS Recommendations
 - **Minimum**: VPS Plan 1 (1GB RAM, 20GB SSD) - €3.99/month
@@ -269,7 +269,7 @@ du -sh /opt/boxiii/*
 free -h
 ```
 
-## 📞 Support & Updates
+## Support & Updates
 
 ### Automatic Updates
 The deployment includes automatic system updates. For application updates:
@@ -284,6 +284,6 @@ cd /opt/boxiii && git pull && docker-compose -f docker-compose.prod.yml up -d --
 
 ---
 
-**🎉 Congratulations!** Your Boxiii admin platform is now live and accessible to your business partner with full database functionality.
+**Congratulations!** Your Boxiii admin platform is now live and accessible to your business partner with full database functionality.
 
 **Access URL**: `https://yourdomain.com`

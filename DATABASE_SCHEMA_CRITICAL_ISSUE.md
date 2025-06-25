@@ -1,4 +1,4 @@
-# 🚨 CRITICAL DATABASE SCHEMA MISMATCH DOCUMENTATION
+# CRITICAL DATABASE SCHEMA MISMATCH DOCUMENTATION
 
 **Date**: 2025-06-25  
 **Issue**: VPS deployment used outdated database schema causing API errors  
@@ -14,7 +14,7 @@ During VPS deployment, users reported:
 
 ### Schema Mismatch Details
 
-#### ❌ OLD SCHEMA (in repository `database/init/01_schema.sql`)
+#### OLD SCHEMA (in repository `database/init/01_schema.sql`)
 ```sql
 CREATE TABLE creators (
     creator_id VARCHAR(255) PRIMARY KEY,
@@ -35,7 +35,7 @@ CREATE TABLE creators (
 );
 ```
 
-#### ✅ WORKING SCHEMA (local development database)
+#### WORKING SCHEMA (local development database)
 ```sql  
 CREATE TABLE creators (
     creator_id VARCHAR(255) NOT NULL,
@@ -119,20 +119,20 @@ DROP INDEX IF EXISTS idx_creators_platform;
 ## Development Workflow Implications
 
 ### For New Deployments
-1. ✅ Use updated `01_schema.sql` with correct creators schema
-2. ✅ VPS will initialize with working schema from start
-3. ✅ No manual schema fixes needed
+1. [OK] Use updated `01_schema.sql` with correct creators schema
+2. [OK] VPS will initialize with working schema from start
+3. [OK] No manual schema fixes needed
 
 ### For Existing Local Development  
-1. ✅ Local database already has correct schema
-2. ✅ No changes needed for local development
-3. ✅ Continue development as normal
+1. [OK] Local database already has correct schema
+2. [OK] No changes needed for local development
+3. [OK] Continue development as normal
 
 ### For Future Schema Changes
-1. 📋 **ALWAYS** export schema from working local database first
-2. 📋 **VERIFY** schema matches between local and repository 
-3. 📋 **TEST** new deployments use correct schema
-4. 📋 **DOCUMENT** any schema evolution in dedicated files
+1. [TODO] **ALWAYS** export schema from working local database first
+2. [TODO] **VERIFY** schema matches between local and repository 
+3. [TODO] **TEST** new deployments use correct schema
+4. [TODO] **DOCUMENT** any schema evolution in dedicated files
 
 ## Critical Lessons Learned
 

@@ -1,42 +1,42 @@
-# 🔍 DATABASE DEFAULT VALUES - REVIEW REQUIRED
+# DATABASE DEFAULT VALUES - REVIEW REQUIRED
 
 **Date**: 2025-06-25  
 **Status**: NEEDS REVIEW - These defaults were inherited and may not match business requirements  
 **Priority**: Review before production use  
 
-## 🚨 DEFAULT VALUES THAT NEED ATTENTION
+## DEFAULT VALUES THAT NEED ATTENTION
 
 ### 1. Content Sets (content_sets table)
 
 | Field | Current Default | Status | Notes |
 |-------|----------------|---------|-------|
-| `card_count` | `0` | ✅ OK | Makes sense for new sets |
-| `estimated_time_minutes` | `30` | ⚠️ **REVIEW** | Is 30 minutes appropriate default? |
-| `difficulty_level` | `'intermediate'` | ⚠️ **REVIEW** | Should default be 'beginner'? |
-| `target_audience` | `'general_public'` | ⚠️ **REVIEW** | Is this the right default audience? |
-| `content_style` | `'question_first'` | ⚠️ **REVIEW** | Is this the preferred content style? |
-| `status` | `'draft'` | ✅ OK | Makes sense for new content |
-| `language` | `'pt-BR'` | ⚠️ **REVIEW** | Should this be configurable? |
+| `card_count` | `0` | [OK] | Makes sense for new sets |
+| `estimated_time_minutes` | `30` | [REVIEW] | Is 30 minutes appropriate default? |
+| `difficulty_level` | `'intermediate'` | [REVIEW] | Should default be 'beginner'? |
+| `target_audience` | `'general_public'` | [REVIEW] | Is this the right default audience? |
+| `content_style` | `'question_first'` | [REVIEW] | Is this the preferred content style? |
+| `status` | `'draft'` | [OK] | Makes sense for new content |
+| `language` | `'pt-BR'` | [REVIEW] | Should this be configurable? |
 
 ### 2. Creators (creators table)
 
 | Field | Current Default | Status | Notes |
 |-------|----------------|---------|-------|
-| `verified` | `false` | ✅ OK | New creators start unverified |
-| `content_style` | `'educational'` | 🚨 **USER FLAGGED** | User noted this may not be right |
-| `social_links` | `'{}'` (empty JSON) | ✅ OK | Empty object makes sense |
-| `platforms` | `'[]'` (empty array) | ✅ OK | Empty array makes sense |
+| `verified` | `false` | [OK] | New creators start unverified |
+| `content_style` | `'educational'` | [USER FLAGGED] | User noted this may not be right |
+| `social_links` | `'{}'` (empty JSON) | [OK] | Empty object makes sense |
+| `platforms` | `'[]'` (empty array) | [OK] | Empty array makes sense |
 
 ### 3. Content Cards (content_cards table)
 
 | Field | Current Default | Status | Notes |
 |-------|----------------|---------|-------|
-| `domain_data` | `'{}'` (empty JSON) | ✅ OK | Empty object makes sense |
-| `media` | `'[]'` (empty array) | ✅ OK | Empty array makes sense |
-| `navigation_contexts` | `'{}'` (empty JSON) | ✅ OK | Empty object makes sense |
-| `tags` | `'[]'` (empty array) | ✅ OK | Empty array makes sense |
+| `domain_data` | `'{}'` (empty JSON) | [OK] | Empty object makes sense |
+| `media` | `'[]'` (empty array) | [OK] | Empty array makes sense |
+| `navigation_contexts` | `'{}'` (empty JSON) | [OK] | Empty object makes sense |
+| `tags` | `'[]'` (empty array) | [OK] | Empty array makes sense |
 
-## 🎯 SPECIFIC ISSUES TO ADDRESS
+## SPECIFIC ISSUES TO ADDRESS
 
 ### Issue 1: Creator Content Style Default
 - **Current**: `content_style` defaults to `'educational'`
@@ -55,7 +55,7 @@
 - **Current**: `estimated_time_minutes` defaults to `30`
 - **Question**: Is 30 minutes realistic for average content?
 
-## 📋 REVIEW CHECKLIST
+## REVIEW CHECKLIST
 
 When reviewing these defaults, consider:
 
@@ -65,7 +65,7 @@ When reviewing these defaults, consider:
 - [ ] **Content Types**: Do defaults work for different content styles/formats?
 - [ ] **Creator Onboarding**: Do defaults help new creators get started quickly?
 
-## 🔧 HOW TO CHANGE DEFAULTS
+## HOW TO CHANGE DEFAULTS
 
 ### For New Deployments
 Update defaults in `database/init/01_schema.sql` before deployment.
@@ -80,12 +80,12 @@ ALTER TABLE creators ALTER COLUMN content_style SET DEFAULT 'new_default_value';
 ALTER TABLE content_sets ALTER COLUMN difficulty_level SET DEFAULT 'beginner';
 ```
 
-## ⚠️ IMPACT WARNING
+## IMPACT WARNING
 
 **CRITICAL**: Changing defaults affects:
-- ✅ **New Records**: Will use new defaults
-- ❌ **Existing Records**: Keep current values (not automatically updated)
-- 🔄 **Application Logic**: May need updates to handle new defaults
+- [OK] **New Records**: Will use new defaults
+- [NO] **Existing Records**: Keep current values (not automatically updated)
+- [UPDATE] **Application Logic**: May need updates to handle new defaults
 
 **RECOMMENDATION**: Review and update defaults BEFORE significant content creation begins.
 
