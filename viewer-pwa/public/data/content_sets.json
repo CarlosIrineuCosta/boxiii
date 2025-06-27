@@ -1,0 +1,164 @@
+[
+  {
+    "set_id": "wellness-50plus-basics",
+    "set_number": "s001",
+    "creator_id": "ana_contti",
+    "title": "Bem-estar após os 50: Fundamentos",
+    "description": "Aprenda os princípios fundamentais para manter uma vida saudável e ativa após os 50 anos",
+    "category": "wellness",
+    "thumbnail_url": "https://source.unsplash.com/400x400/?wellness,mature",
+    "banner_url": "https://source.unsplash.com/800x400/?wellness,healthy",
+    "cover_url": "https://source.unsplash.com/600x900/?book,wellness",
+    "card_count": 10,
+    "estimated_time_minutes": 30,
+    "difficulty_level": "beginner",
+    "target_audience": "Mulheres 50+",
+    "supported_navigation": ["sequential", "random"],
+    "content_style": "educational",
+    "tags": ["saúde", "bem-estar", "envelhecimento ativo"],
+    "tags_pt": ["Populares", "Novo"],
+    "is_hero": true,
+    "prerequisites": [],
+    "learning_outcomes": [
+      "Compreender os pilares do envelhecimento saudável",
+      "Identificar hábitos essenciais para o bem-estar",
+      "Criar uma rotina personalizada de cuidados"
+    ],
+    "color_scheme": {
+      "primary": "#FF69B4",
+      "secondary": "#FF1493",
+      "accent": "#FFB6C1"
+    },
+    "stats": {
+      "views": 1250,
+      "completion_rate": 78,
+      "rating": 4.8
+    },
+    "status": "published",
+    "language": "pt-BR",
+    "created_at": "2025-06-15T10:00:00Z",
+    "updated_at": "2025-06-20T14:30:00Z"
+  },
+  {
+    "set_id": "nutrition-hormones-50",
+    "set_number": "s002",
+    "creator_id": "ana_contti",
+    "title": "Nutrição e Hormônios na Menopausa",
+    "description": "Guia completo sobre alimentação e mudanças hormonais durante e após a menopausa",
+    "category": "health",
+    "thumbnail_url": "https://source.unsplash.com/400x400/?nutrition,food",
+    "banner_url": "https://source.unsplash.com/800x400/?healthy,diet",
+    "cover_url": "https://source.unsplash.com/600x900/?cookbook,health",
+    "card_count": 15,
+    "estimated_time_minutes": 45,
+    "difficulty_level": "intermediate",
+    "target_audience": "Mulheres 45-65 anos",
+    "supported_navigation": ["sequential"],
+    "content_style": "guide",
+    "tags": ["nutrição", "menopausa", "hormônios", "alimentação"],
+    "tags_pt": ["Populares"],
+    "is_hero": false,
+    "prerequisites": ["Conhecimento básico sobre nutrição"],
+    "learning_outcomes": [
+      "Entender as mudanças hormonais na menopausa",
+      "Escolher alimentos que auxiliam no equilíbrio hormonal",
+      "Planejar refeições balanceadas para esta fase"
+    ],
+    "color_scheme": {
+      "primary": "#4CAF50",
+      "secondary": "#388E3C",
+      "accent": "#81C784"
+    },
+    "stats": {
+      "views": 890,
+      "completion_rate": 65,
+      "rating": 4.9
+    },
+    "status": "published",
+    "language": "pt-BR",
+    "created_at": "2025-06-18T09:00:00Z",
+    "updated_at": "2025-06-22T16:00:00Z"
+  },
+  {
+    "set_id": "javascript-basics",
+    "set_number": "s003",
+    "creator_id": "tech_educator",
+    "title": "JavaScript Fundamentals",
+    "description": "Master the core concepts of JavaScript programming from variables to functions",
+    "category": "technology",
+    "thumbnail_url": "https://source.unsplash.com/400x400/?javascript,code",
+    "banner_url": "https://source.unsplash.com/800x400/?programming,computer",
+    "cover_url": "https://source.unsplash.com/600x900/?book,programming",
+    "card_count": 20,
+    "estimated_time_minutes": 60,
+    "difficulty_level": "beginner",
+    "target_audience": "Aspiring developers",
+    "supported_navigation": ["sequential", "topic"],
+    "content_style": "tutorial",
+    "tags": ["javascript", "programming", "web development", "coding"],
+    "tags_pt": ["Populares"],
+    "is_hero": false,
+    "prerequisites": ["Basic computer skills", "Text editor installed"],
+    "learning_outcomes": [
+      "Understand JavaScript data types and variables",
+      "Write and debug functions",
+      "Work with arrays and objects",
+      "Handle basic DOM manipulation"
+    ],
+    "color_scheme": {
+      "primary": "#F7DF1E",
+      "secondary": "#323330",
+      "accent": "#61DAFB"
+    },
+    "stats": {
+      "views": 3420,
+      "completion_rate": 72,
+      "rating": 4.7
+    },
+    "status": "published",
+    "language": "en",
+    "created_at": "2025-06-10T08:00:00Z",
+    "updated_at": "2025-06-25T10:00:00Z"
+  },
+  {
+    "set_id": "react-hooks-guide",
+    "set_number": "s004",
+    "creator_id": "tech_educator",
+    "title": "React Hooks Deep Dive",
+    "description": "Comprehensive guide to React Hooks - useState, useEffect, and custom hooks",
+    "category": "technology",
+    "thumbnail_url": "https://source.unsplash.com/400x400/?react,programming",
+    "banner_url": "https://source.unsplash.com/800x400/?coding,development",
+    "cover_url": "https://source.unsplash.com/600x900/?technology,book",
+    "card_count": 18,
+    "estimated_time_minutes": 90,
+    "difficulty_level": "intermediate",
+    "target_audience": "React developers",
+    "supported_navigation": ["sequential", "topic"],
+    "content_style": "tutorial",
+    "tags": ["react", "hooks", "frontend", "javascript"],
+    "tags_pt": ["Novo"],
+    "is_hero": false,
+    "prerequisites": ["JavaScript ES6+", "Basic React knowledge"],
+    "learning_outcomes": [
+      "Master useState and useEffect",
+      "Create custom hooks",
+      "Optimize performance with useMemo and useCallback",
+      "Handle complex state with useReducer"
+    ],
+    "color_scheme": {
+      "primary": "#61DAFB",
+      "secondary": "#282C34",
+      "accent": "#21A1F1"
+    },
+    "stats": {
+      "views": 1560,
+      "completion_rate": 68,
+      "rating": 4.8
+    },
+    "status": "published",
+    "language": "en",
+    "created_at": "2025-06-20T12:00:00Z",
+    "updated_at": "2025-06-26T09:00:00Z"
+  }
+]

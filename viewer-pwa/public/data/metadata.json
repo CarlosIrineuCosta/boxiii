@@ -1,0 +1,10 @@
+{
+  "rendered_at": "2025-06-27T10:00:00Z",
+  "counts": {
+    "creators": 2,
+    "content_sets": 4,
+    "cards": 10
+  },
+  "version": "1.0.0",
+  "description": "Sample data for Boxiii PWA Viewer testing"
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Boxiii Viewer Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #1a1a1a; color: white; }
+        .box { border: 1px solid #333; padding: 15px; margin: 10px 0; border-radius: 8px; background: #2a2a2a; }
+        button { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🎯 Boxiii Viewer - WSL2 Test</h1>
+    <p>✅ Python server working!</p>
+    <p>📦 API Status: <span id="api-status">Testing...</span></p>
+    
+    <div id="boxes-container">
+        <h2>Available Boxes:</h2>
+        <div id="boxes-list">Loading...</div>
+    </div>
+
+    <script>
+        // Test API connection
+        async function testAPI() {
+            try {
+                const response = await fetch('http://localhost:5001/api/sets');
+                const data = await response.json();
+                document.getElementById('api-status').textContent = `✅ Connected - ${data.data?.length || 0} boxes found`;
+                displayBoxes(data.data || []);
+            } catch (error) {
+                document.getElementById('api-status').textContent = `❌ API Error: ${error.message}`;
+                // Show sample data instead
+                displayBoxes([
+                    {set_id: 'test1', title: 'Sample Box 1', description: 'Test content', card_count: 5},
+                    {set_id: 'test2', title: 'Sample Box 2', description: 'More test content', card_count: 3}
+                ]);
+            }
+        }
+
+        function displayBoxes(boxes) {
+            const container = document.getElementById('boxes-list');
+            if (boxes.length === 0) {
+                container.innerHTML = '<p>No boxes found</p>';
+                return;
+            }
+            
+            container.innerHTML = boxes.map(box => `
+                <div class="box">
+                    <h3>${box.title}</h3>
+                    <p>${box.description}</p>
+                    <p>Cards: ${box.card_count || 0}</p>
+                    <button onclick="alert('Opening ${box.title}')">Open Box</button>
+                </div>
+            `).join('');
+        }
+
+        // Test on load
+        testAPI();
+    </script>
+</body>
+</html>

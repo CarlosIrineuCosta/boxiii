@@ -1,0 +1,284 @@
+[
+  {
+    "card_id": "wellness-001",
+    "card_number": "c001",
+    "set_id": "wellness-50plus-basics",
+    "creator_id": "ana_contti",
+    "title": "Os 5 Pilares do Bem-estar após os 50",
+    "summary": "Conheça os elementos fundamentais para uma vida plena e saudável",
+    "detailed_content": "O bem-estar após os 50 anos se sustenta em cinco pilares essenciais:\n\n1. **Movimento Regular**: Exercícios adaptados que fortalecem músculos e ossos\n2. **Nutrição Consciente**: Alimentação rica em nutrientes e adequada às mudanças metabólicas\n3. **Sono Reparador**: 7-8 horas de sono de qualidade para regeneração celular\n4. **Conexões Sociais**: Manter vínculos afetivos e criar novos relacionamentos\n5. **Propósito de Vida**: Encontrar significado e motivação para cada novo dia\n\nCada pilar se interconecta e fortalece os demais, criando uma base sólida para o envelhecimento ativo.",
+    "order_index": 1,
+    "navigation_contexts": {
+      "sequential": { "next": "wellness-002" },
+      "topic": { "related": ["wellness-003", "wellness-005"] }
+    },
+    "media": [
+      {
+        "type": "image",
+        "url": "https://source.unsplash.com/800x600/?wellness,exercise",
+        "caption": "Movimento é vida em qualquer idade"
+      }
+    ],
+    "domain_data": {
+      "category": "introduction",
+      "difficulty": 1,
+      "time_to_read": 3
+    },
+    "tags": ["introdução", "pilares", "bem-estar"],
+    "created_at": "2025-06-15T10:00:00Z",
+    "updated_at": "2025-06-15T10:00:00Z"
+  },
+  {
+    "card_id": "wellness-002",
+    "card_number": "c002",
+    "set_id": "wellness-50plus-basics",
+    "creator_id": "ana_contti",
+    "title": "Exercícios de Baixo Impacto",
+    "summary": "Atividades físicas seguras e eficazes para fortalecer o corpo",
+    "detailed_content": "Exercícios de baixo impacto são ideais para proteger articulações enquanto mantém o corpo ativo:\n\n**Caminhada**: 30 minutos diários, preferencialmente em horários frescos\n\n**Hidroginástica**: Excelente para fortalecer sem sobrecarregar articulações\n\n**Yoga ou Pilates**: Melhora flexibilidade, equilíbrio e força muscular\n\n**Dança**: Combina exercício com diversão e socialização\n\n**Natação**: Trabalha todo o corpo com mínimo impacto\n\nLembre-se: sempre consulte um profissional antes de iniciar qualquer programa de exercícios.",
+    "order_index": 2,
+    "navigation_contexts": {
+      "sequential": { "previous": "wellness-001", "next": "wellness-003" },
+      "topic": { "related": ["wellness-004", "wellness-007"] }
+    },
+    "media": [
+      {
+        "type": "image",
+        "url": "https://source.unsplash.com/800x600/?swimming,pool",
+        "caption": "A natação trabalha todos os grupos musculares"
+      }
+    ],
+    "domain_data": {
+      "category": "exercise",
+      "difficulty": 1,
+      "time_to_read": 4
+    },
+    "tags": ["exercícios", "baixo impacto", "atividade física"],
+    "created_at": "2025-06-15T10:05:00Z",
+    "updated_at": "2025-06-15T10:05:00Z"
+  },
+  {
+    "card_id": "wellness-003",
+    "card_number": "c003",
+    "set_id": "wellness-50plus-basics",
+    "creator_id": "ana_contti",
+    "title": "Alimentação Anti-inflamatória",
+    "summary": "Alimentos que combatem a inflamação e promovem longevidade",
+    "detailed_content": "Uma dieta anti-inflamatória é fundamental após os 50:\n\n**Incluir diariamente**:\n- Peixes ricos em ômega-3 (salmão, sardinha)\n- Vegetais de folhas verdes escuras\n- Frutas vermelhas (morango, mirtilo)\n- Azeite de oliva extra virgem\n- Castanhas e nozes\n- Chá verde\n\n**Reduzir ou evitar**:\n- Açúcar refinado\n- Alimentos ultraprocessados\n- Excesso de carne vermelha\n- Óleos refinados\n- Bebidas alcoólicas em excesso\n\nPequenas mudanças diárias geram grandes resultados ao longo do tempo.",
+    "order_index": 3,
+    "navigation_contexts": {
+      "sequential": { "previous": "wellness-002", "next": "wellness-004" },
+      "topic": { "related": ["nutrition-001", "wellness-008"] }
+    },
+    "media": [
+      {
+        "type": "image",
+        "url": "https://source.unsplash.com/800x600/?healthy,food",
+        "caption": "Cores vibrantes indicam alimentos ricos em antioxidantes"
+      }
+    ],
+    "domain_data": {
+      "category": "nutrition",
+      "difficulty": 2,
+      "time_to_read": 5
+    },
+    "tags": ["nutrição", "anti-inflamatório", "alimentação"],
+    "created_at": "2025-06-15T10:10:00Z",
+    "updated_at": "2025-06-15T10:10:00Z"
+  },
+  {
+    "card_id": "nutrition-001",
+    "card_number": "c001",
+    "set_id": "nutrition-hormones-50",
+    "creator_id": "ana_contti",
+    "title": "Entendendo a Menopausa",
+    "summary": "O que acontece com nosso corpo durante esta transição natural",
+    "detailed_content": "A menopausa é uma fase natural da vida feminina, marcada pelo fim dos ciclos menstruais:\n\n**O que acontece**:\n- Diminuição gradual de estrogênio e progesterona\n- Cessação da ovulação\n- Fim da menstruação (após 12 meses sem menstruar)\n\n**Sintomas comuns**:\n- Ondas de calor (fogachos)\n- Alterações de humor\n- Mudanças no sono\n- Ressecamento vaginal\n- Alterações na pele e cabelo\n\n**Importante**: Cada mulher vivencia a menopausa de forma única. Procure acompanhamento médico para um plano personalizado.",
+    "order_index": 1,
+    "navigation_contexts": {
+      "sequential": { "next": "nutrition-002" },
+      "topic": { "related": ["nutrition-003", "nutrition-005"] }
+    },
+    "media": [],
+    "domain_data": {
+      "category": "education",
+      "difficulty": 1,
+      "time_to_read": 4
+    },
+    "tags": ["menopausa", "hormônios", "saúde feminina"],
+    "created_at": "2025-06-18T09:00:00Z",
+    "updated_at": "2025-06-18T09:00:00Z"
+  },
+  {
+    "card_id": "javascript-001",
+    "card_number": "c001",
+    "set_id": "javascript-basics",
+    "creator_id": "tech_educator",
+    "title": "What is JavaScript?",
+    "summary": "Understanding JavaScript's role in web development",
+    "detailed_content": "JavaScript is a versatile programming language that brings websites to life:\n\n**Key Points**:\n- Created by Brendan Eich in 1995\n- Initially designed for web browsers\n- Now runs everywhere: servers, mobile apps, desktop apps\n- Interpreted language (no compilation needed)\n- Dynamic and weakly typed\n\n**Why Learn JavaScript?**\n- Most popular programming language\n- Essential for web development\n- Large, supportive community\n- Countless job opportunities\n- Relatively easy to start learning\n\n```javascript\n// Your first JavaScript code\nconsole.log('Hello, World!');\n```",
+    "order_index": 1,
+    "navigation_contexts": {
+      "sequential": { "next": "javascript-002" },
+      "topic": { "related": ["javascript-003", "javascript-010"] }
+    },
+    "media": [
+      {
+        "type": "code",
+        "language": "javascript",
+        "content": "console.log('Welcome to JavaScript!');"
+      }
+    ],
+    "domain_data": {
+      "category": "introduction",
+      "difficulty": 1,
+      "time_to_read": 3,
+      "code_examples": 1
+    },
+    "tags": ["introduction", "basics", "history"],
+    "created_at": "2025-06-10T08:00:00Z",
+    "updated_at": "2025-06-10T08:00:00Z"
+  },
+  {
+    "card_id": "javascript-002",
+    "card_number": "c002",
+    "set_id": "javascript-basics",
+    "creator_id": "tech_educator",
+    "title": "Variables and Data Types",
+    "summary": "How to store and work with different types of data",
+    "detailed_content": "Variables are containers for storing data values:\n\n**Declaring Variables**:\n```javascript\nlet age = 25;           // Can be changed\nconst name = 'John';    // Cannot be changed\nvar oldWay = true;      // Avoid using var\n```\n\n**Data Types**:\n```javascript\n// Numbers\nlet integer = 42;\nlet decimal = 3.14;\n\n// Strings\nlet text = 'Hello';\nlet quote = \"World\";\n\n// Booleans\nlet isActive = true;\nlet isComplete = false;\n\n// Null and Undefined\nlet empty = null;\nlet notDefined = undefined;\n\n// Objects\nlet person = {\n  name: 'Alice',\n  age: 30\n};\n\n// Arrays\nlet numbers = [1, 2, 3, 4, 5];\n```",
+    "order_index": 2,
+    "navigation_contexts": {
+      "sequential": { "previous": "javascript-001", "next": "javascript-003" },
+      "topic": { "related": ["javascript-004", "javascript-006"] }
+    },
+    "media": [
+      {
+        "type": "code",
+        "language": "javascript",
+        "content": "// Try it yourself!\nlet myName = 'Your Name';\nlet myAge = 25;\nlet isLearning = true;\n\nconsole.log(`${myName} is ${myAge} years old`);"
+      }
+    ],
+    "domain_data": {
+      "category": "fundamentals",
+      "difficulty": 1,
+      "time_to_read": 5,
+      "code_examples": 3
+    },
+    "tags": ["variables", "data types", "fundamentals"],
+    "created_at": "2025-06-10T08:10:00Z",
+    "updated_at": "2025-06-10T08:10:00Z"
+  },
+  {
+    "card_id": "react-001",
+    "card_number": "c001",
+    "set_id": "react-hooks-guide",
+    "creator_id": "tech_educator",
+    "title": "Introduction to React Hooks",
+    "summary": "Why Hooks revolutionized React development",
+    "detailed_content": "React Hooks allow you to use state and other React features in functional components:\n\n**Before Hooks** (Class Components):\n```javascript\nclass Counter extends React.Component {\n  state = { count: 0 };\n  \n  increment = () => {\n    this.setState({ count: this.state.count + 1 });\n  }\n  \n  render() {\n    return (\n      <button onClick={this.increment}>\n        Count: {this.state.count}\n      </button>\n    );\n  }\n}\n```\n\n**With Hooks** (Functional Components):\n```javascript\nfunction Counter() {\n  const [count, setCount] = useState(0);\n  \n  return (\n    <button onClick={() => setCount(count + 1)}>\n      Count: {count}\n    </button>\n  );\n}\n```\n\n**Benefits**:\n- Simpler code\n- Better code reuse\n- Easier to test\n- No more 'this' confusion",
+    "order_index": 1,
+    "navigation_contexts": {
+      "sequential": { "next": "react-002" },
+      "topic": { "related": ["react-003", "react-010"] }
+    },
+    "media": [
+      {
+        "type": "code",
+        "language": "jsx",
+        "content": "// Modern React with Hooks\nimport { useState } from 'react';\n\nfunction App() {\n  const [message, setMessage] = useState('Hello Hooks!');\n  \n  return <h1>{message}</h1>;\n}"
+      }
+    ],
+    "domain_data": {
+      "category": "introduction",
+      "difficulty": 2,
+      "time_to_read": 5,
+      "code_examples": 2
+    },
+    "tags": ["hooks", "introduction", "functional components"],
+    "created_at": "2025-06-20T12:00:00Z",
+    "updated_at": "2025-06-20T12:00:00Z"
+  },
+  {
+    "card_id": "react-002",
+    "card_number": "c002",
+    "set_id": "react-hooks-guide",
+    "creator_id": "tech_educator",
+    "title": "useState Hook Deep Dive",
+    "summary": "Managing component state with useState",
+    "detailed_content": "The useState Hook is the most fundamental Hook for managing state:\n\n**Basic Usage**:\n```javascript\nconst [state, setState] = useState(initialValue);\n```\n\n**Examples**:\n```javascript\nfunction Examples() {\n  // Simple value\n  const [count, setCount] = useState(0);\n  \n  // Object state\n  const [user, setUser] = useState({\n    name: '',\n    email: ''\n  });\n  \n  // Array state\n  const [todos, setTodos] = useState([]);\n  \n  // Lazy initial state\n  const [data, setData] = useState(() => {\n    // Expensive computation\n    return calculateInitialData();\n  });\n  \n  // Updating state\n  const increment = () => setCount(count + 1);\n  const incrementSafe = () => setCount(prev => prev + 1);\n  \n  // Updating object state\n  const updateUser = (name) => {\n    setUser(prev => ({ ...prev, name }));\n  };\n}\n```\n\n**Best Practices**:\n- Use functional updates for state that depends on previous state\n- Keep state as simple as possible\n- Split complex state into multiple useState calls",
+    "order_index": 2,
+    "navigation_contexts": {
+      "sequential": { "previous": "react-001", "next": "react-003" },
+      "topic": { "related": ["react-004", "react-005"] }
+    },
+    "media": [],
+    "domain_data": {
+      "category": "core-hooks",
+      "difficulty": 2,
+      "time_to_read": 6,
+      "code_examples": 4
+    },
+    "tags": ["useState", "state management", "hooks"],
+    "created_at": "2025-06-20T12:30:00Z",
+    "updated_at": "2025-06-20T12:30:00Z"
+  },
+  {
+    "card_id": "wellness-004",
+    "card_number": "c004",
+    "set_id": "wellness-50plus-basics",
+    "creator_id": "ana_contti",
+    "title": "Qualidade do Sono após os 50",
+    "summary": "Estratégias para melhorar o sono e o descanso reparador",
+    "detailed_content": "O sono de qualidade é essencial para a saúde e bem-estar:\n\n**Dicas para melhor sono**:\n- Mantenha horários regulares para dormir e acordar\n- Crie um ambiente escuro, fresco e silencioso\n- Evite telas 1 hora antes de dormir\n- Pratique relaxamento ou meditação\n- Limite cafeína após 14h\n- Jantar leve, 3 horas antes de dormir\n\n**Ritual noturno sugerido**:\n1. Banho morno relaxante\n2. Chá de camomila ou melissa\n3. Leitura leve ou música calma\n4. Respiração profunda no escuro\n\nSe problemas persistirem, consulte um especialista em sono.",
+    "order_index": 4,
+    "navigation_contexts": {
+      "sequential": { "previous": "wellness-003", "next": "wellness-005" },
+      "topic": { "related": ["wellness-002", "wellness-009"] }
+    },
+    "media": [
+      {
+        "type": "image",
+        "url": "https://source.unsplash.com/800x600/?bedroom,peaceful",
+        "caption": "Um ambiente tranquilo favorece o sono reparador"
+      }
+    ],
+    "domain_data": {
+      "category": "lifestyle",
+      "difficulty": 1,
+      "time_to_read": 4
+    },
+    "tags": ["sono", "descanso", "rotina noturna"],
+    "created_at": "2025-06-15T10:15:00Z",
+    "updated_at": "2025-06-15T10:15:00Z"
+  },
+  {
+    "card_id": "wellness-005",
+    "card_number": "c005",
+    "set_id": "wellness-50plus-basics",
+    "creator_id": "ana_contti",
+    "title": "Conexões Sociais e Saúde Mental",
+    "summary": "A importância dos relacionamentos para o bem-estar emocional",
+    "detailed_content": "Manter conexões sociais ativas é vital para a saúde mental:\n\n**Benefícios comprovados**:\n- Reduz risco de depressão\n- Melhora função cognitiva\n- Aumenta longevidade\n- Fortalece sistema imunológico\n- Proporciona senso de pertencimento\n\n**Como cultivar conexões**:\n- Participe de grupos com interesses comuns\n- Mantenha contato regular com família e amigos\n- Considere voluntariado na comunidade\n- Explore novas amizades em atividades\n- Use tecnologia para conectar com distantes\n\n**Qualidade sobre quantidade**: Poucas conexões profundas são mais valiosas que muitas superficiais.",
+    "order_index": 5,
+    "navigation_contexts": {
+      "sequential": { "previous": "wellness-004", "next": "wellness-006" },
+      "topic": { "related": ["wellness-001", "wellness-010"] }
+    },
+    "media": [
+      {
+        "type": "image",
+        "url": "https://source.unsplash.com/800x600/?friends,happy",
+        "caption": "Amizades verdadeiras enriquecem nossa jornada"
+      }
+    ],
+    "domain_data": {
+      "category": "mental-health",
+      "difficulty": 1,
+      "time_to_read": 4
+    },
+    "tags": ["relacionamentos", "saúde mental", "conexões"],
+    "created_at": "2025-06-15T10:20:00Z",
+    "updated_at": "2025-06-15T10:20:00Z"
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "creator_id": "ana_contti",
+    "display_name": "Ana Contti 50+",
+    "platform": "instagram",
+    "platform_handle": "@anacontti50mais",
+    "avatar_url": "https://ui-avatars.com/api/?name=Ana+Contti&background=FF69B4&color=fff",
+    "banner_url": "https://source.unsplash.com/800x400/?wellness,woman",
+    "description": "Dicas de bem-estar, saúde e cuidados pessoais para mulheres 50+",
+    "categories": ["wellness", "health", "lifestyle"],
+    "follower_count": 50000,
+    "verified": true,
+    "social_links": {
+      "instagram": "https://instagram.com/anacontti50mais"
+    },
+    "expertise_areas": ["Bem-estar", "Saúde feminina", "Envelhecimento ativo"],
+    "content_style": "educational",
+    "created_at": "2025-06-01T10:00:00Z",
+    "updated_at": "2025-06-01T10:00:00Z"
+  },
+  {
+    "creator_id": "tech_educator",
+    "display_name": "Tech Educator",
+    "platform": "youtube",
+    "platform_handle": "@techeducator",
+    "avatar_url": "https://ui-avatars.com/api/?name=Tech+Educator&background=3B82F6&color=fff",
+    "banner_url": "https://source.unsplash.com/800x400/?technology,coding",
+    "description": "Making technology accessible to everyone",
+    "categories": ["technology", "education", "programming"],
+    "follower_count": 25000,
+    "verified": true,
+    "social_links": {
+      "youtube": "https://youtube.com/@techeducator"
+    },
+    "expertise_areas": ["Programming", "Web Development", "AI"],
+    "content_style": "tutorial",
+    "created_at": "2025-06-01T10:00:00Z",
+    "updated_at": "2025-06-01T10:00:00Z"
+  }
+]
