@@ -57,7 +57,7 @@ export default function BoxCard({ box, isOnline }: BoxCardProps) {
       'from-yellow-500 to-orange-600',
       'from-indigo-500 to-purple-600',
     ];
-    const colorIndex = box.set_id.length % colors.length;
+    // const colorIndex = box.set_id.length % colors.length;
     // const gradient = colors[colorIndex]; // TODO: Use for dynamic gradients
     
     return `data:image/svg+xml,${encodeURIComponent(`
