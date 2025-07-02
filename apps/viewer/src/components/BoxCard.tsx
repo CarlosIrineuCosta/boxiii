@@ -50,15 +50,16 @@ export default function BoxCard({ box, isOnline }: BoxCardProps) {
     if (box.thumbnail_url) return box.thumbnail_url;
     
     // Generate gradient placeholder
-    const colors = [
-      'from-blue-500 to-purple-600',
-      'from-green-500 to-teal-600',
-      'from-red-500 to-pink-600',
-      'from-yellow-500 to-orange-600',
-      'from-indigo-500 to-purple-600',
-    ];
+    // TODO: Use dynamic gradients based on box ID
+    // const colors = [
+    //   'from-blue-500 to-purple-600',
+    //   'from-green-500 to-teal-600',
+    //   'from-red-500 to-pink-600',
+    //   'from-yellow-500 to-orange-600',
+    //   'from-indigo-500 to-purple-600',
+    // ];
     // const colorIndex = box.set_id.length % colors.length;
-    // const gradient = colors[colorIndex]; // TODO: Use for dynamic gradients
+    // const gradient = colors[colorIndex];
     
     return `data:image/svg+xml,${encodeURIComponent(`
       <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
