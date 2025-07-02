@@ -77,7 +77,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - VITE_API_URL=http://localhost:5001/api/public
+      - VITE_USE_API=true
+      - VITE_API_URL=/api
     volumes:
       - ../../apps/viewer:/app
       - /app/node_modules

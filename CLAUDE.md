@@ -135,6 +135,52 @@ project-root/
 - [CRITICAL] Database Schema: Critical mismatch between repository and working schema (see DATABASE_SCHEMA_CRITICAL_ISSUE.md)
 - [TODO] CI/CD: Planning phase, implementation roadmap created (see CI_CD_IMPLEMENTATION_PLAN.md)
 
+### Session Summary (2025-07-02)
+
+#### VPS DEPLOYMENT FIXES:
+1. **Identified Root Cause**: Builder app was redirecting `/` to `/dashboard`, causing confusion about which app was being served
+2. **Fixed Nginx Routing**:
+   - `/` → Viewer PWA (port 3000)
+   - `/dashboard`, `/creators`, `/boxes`, etc. → Builder Admin (port 3001)
+   - `/api/` → Backend API (port 5001)
+3. **Fixed TypeScript Error**: Removed escape character in `main.tsx` that was preventing builds
+4. **Rebuilt Containers**: Updated viewer with CSS import enabled
+5. **Current Status**:
+   - Builder: Fully functional at `/dashboard`
+   - Viewer: Functional but missing CSS styling (Tailwind build error)
+   - API: Working correctly for both apps
+
+#### TECHNICAL ISSUES RESOLVED:
+- **Container Confusion**: Clarified that viewer runs on port 3000, builder on 3001
+- **Nginx Configuration**: Updated system nginx (not Docker nginx) with proper routing rules
+- **Browser Cache**: Identified cache was showing outdated redirects
+
+#### REMAINING ISSUE:
+- **Tailwind CSS**: Build warning about unknown utility classes, resulting in no styling for Viewer app
+
+### Session Summary (2025-07-02) - Earlier
+
+#### VIEWER-BUILDER DATABASE INTEGRATION IMPLEMENTED:
+1. **Fixed Viewer App**: Changed from test SimpleApp to real PWA with React Router and API integration
+2. **Database Architecture**: Confirmed shared PostgreSQL database for both Builder and Viewer
+3. **API Mode Implementation**: 
+   - Builder Backend: FastAPI with full REST endpoints (`/api/sets`, `/api/cards`, `/api/creators`)
+   - Viewer Frontend: React PWA with API client connecting to shared database
+   - Docker Configuration: `VITE_USE_API=true` + `VITE_API_URL=/api`
+4. **Production Deployment**: Successfully rebuilt and deployed viewer container with API connectivity
+5. **Nginx Routing**: Fixed all routing - Base URL→Dashboard, Dashboard→Builder, API→Backend, Other paths→Viewer
+
+#### DATABASE SOLUTION IMPLEMENTED:
+- **Single PostgreSQL Database**: `boxiii-db` container shared by Builder and Viewer
+- **Live Data Flow**: Content creators use Builder → data saved to PostgreSQL → Viewer reads via API
+- **Real-time Testing**: Content changes in Builder immediately available in Viewer (no static file generation needed)
+- **Future Static Option**: Can add static JSON generation later for offline/performance optimization
+
+#### TECHNICAL ACHIEVEMENTS:
+- **Container Orchestration**: All services running on same VPS with shared network
+- **API Client**: Viewer uses Builder's REST API endpoints with proper error handling and offline fallback
+- **Development Workflow**: Content creators can test immediately without database synchronization delays
+
 ### Session Summary (2025-06-27)
 
 #### MAJOR ACCOMPLISHMENTS TODAY:
