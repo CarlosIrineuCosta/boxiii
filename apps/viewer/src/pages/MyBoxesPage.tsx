@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/api';
-import { db, Box } from '../lib/db';
+import { db } from '../lib/db';
+import type { Box } from '../lib/db';
 import BoxCard from '../components/BoxCard';
 
 interface MyBoxesPageProps {

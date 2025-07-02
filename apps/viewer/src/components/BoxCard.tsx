@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Box } from '../lib/db';
+import type { Box } from '../lib/db';
 import { api } from '../lib/api';
 import { db } from '../lib/db';
 
@@ -58,7 +58,7 @@ export default function BoxCard({ box, isOnline }: BoxCardProps) {
       'from-indigo-500 to-purple-600',
     ];
     const colorIndex = box.set_id.length % colors.length;
-    const gradient = colors[colorIndex];
+    // const gradient = colors[colorIndex]; // TODO: Use for dynamic gradients
     
     return `data:image/svg+xml,${encodeURIComponent(`
       <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">

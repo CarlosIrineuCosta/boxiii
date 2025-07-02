@@ -1,5 +1,6 @@
 // Offline-first database using Dexie (IndexedDB wrapper)
-import Dexie, { Table } from 'dexie';
+import Dexie from 'dexie';
+import type { Table } from 'dexie';
 
 // TypeScript interfaces matching Builder data model
 export interface Creator {
@@ -23,7 +24,7 @@ export interface Box {
   category?: string;
   tags?: string[];
   // Local fields
-  downloaded?: boolean;
+  downloaded?: number; // 0 or 1 for IndexedDB compatibility
   last_accessed?: Date;
   progress?: number;
 }
@@ -75,7 +76,7 @@ class BoxiiiDB extends Dexie {
   async downloadBox(boxId: string): Promise<void> {
     const transaction = this.transaction('rw', this.boxes, this.cards, async () => {
       // Mark box as downloaded
-      await this.boxes.update(boxId, { downloaded: true });
+      await this.boxes.update(boxId, { downloaded: 1 });
       
       // In real app, fetch cards from API here
       // For now, cards should be added separately
@@ -114,7 +115,7 @@ class BoxiiiDB extends Dexie {
 
   // Get downloaded boxes
   async getDownloadedBoxes(): Promise<Box[]> {
-    return this.boxes.where('downloaded').equals(true).toArray();
+    return this.boxes.where('downloaded').equals(1).toArray();
   }
 
   // Get my boxes (downloaded or recently accessed)

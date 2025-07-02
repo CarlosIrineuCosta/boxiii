@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import { api } from '../lib/api';
-import { db, Box, Card } from '../lib/db';
+import { db } from '../lib/db';
+import type { Box, Card } from '../lib/db';
 
 interface CardViewerPageProps {
   isOnline: boolean;
   isPWA: boolean;
 }
 
-export default function CardViewerPage({ isOnline }: CardViewerPageProps) {
+export default function CardViewerPage({}: CardViewerPageProps) {
   const { boxId } = useParams<{ boxId: string }>();
   const navigate = useNavigate();
   

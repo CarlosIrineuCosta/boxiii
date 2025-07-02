@@ -1,5 +1,6 @@
 // API service with offline fallback
-import { db, Box, Card, Creator } from './db';
+import { db } from './db';
+import type { Box, Card, Creator } from './db';
 
 // Use static JSON files by default, can override with env var for API mode
 const USE_API = import.meta.env.VITE_USE_API === 'true';
