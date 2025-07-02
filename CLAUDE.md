@@ -155,8 +155,16 @@ project-root/
 - **Nginx Configuration**: Updated system nginx (not Docker nginx) with proper routing rules
 - **Browser Cache**: Identified cache was showing outdated redirects
 
-#### REMAINING ISSUE:
-- **Tailwind CSS**: Build warning about unknown utility classes, resulting in no styling for Viewer app
+#### FINAL RESOLUTION:
+- **Root Cause**: Nginx routing conflict - `/assets` routed to Builder blocked Viewer CSS/JS loading
+- **Fix Applied**: Removed specific `/assets` route, let default `/` route handle Viewer assets
+- **Result**: Both Builder (`/dashboard`) and Viewer (`/`) now fully functional with styling
+
+#### FINAL STATUS:
+- **Builder**: ✅ Working at `/dashboard` with full functionality
+- **Viewer**: ✅ Working at `/` with proper styling and API connectivity  
+- **API**: ✅ Working at `/api/` shared by both apps
+- **Production**: ✅ All services deployed and operational on VPS
 
 ### Session Summary (2025-07-02) - Earlier
 
