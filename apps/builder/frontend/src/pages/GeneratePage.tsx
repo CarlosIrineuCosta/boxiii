@@ -61,7 +61,7 @@ export default function GeneratePage() {
           window.location.href = `/cards?set_id=${result.set_id}`
         }, 2000)
       } else {
-        toast.error(result.error || 'Generation failed', { id: 'generation' })
+        toast.error(result.message || 'Generation failed', { id: 'generation' })
       }
     } catch (error: any) {
       console.error('Generation error:', error)

@@ -9,7 +9,7 @@ export default function DashboardPage() {
     { name: 'Boxes', value: '...', icon: DocumentTextIcon, color: 'bg-blue-500', link: '/boxes' },
     { name: 'Total Cards', value: '...', icon: SparklesIcon, color: 'bg-purple-500', link: '/cards' },
   ])
-  const [loading, setLoading] = useState(true)
+  const [, setLoading] = useState(true)
   const [recentActivity, setRecentActivity] = useState<any[]>([])
 
   useEffect(() => {
