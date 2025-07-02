@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Longe Vida - Bem-estar para Mulheres 50+</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23a8d5ba;stop-opacity:1" /><stop offset="100%" style="stop-color:%23c8e6c9;stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23grad1)"/><circle cx="200" cy="150" r="80" fill="rgba(255,255,255,0.1)"/><circle cx="800" cy="300" r="120" fill="rgba(255,255,255,0.08)"/><circle cx="1000" cy="100" r="60" fill="rgba(255,255,255,0.12)"/></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            opacity: 0.95;
+            line-height: 1.4;
+        }
+
+        .hero .tagline {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #4a90a4 0%, #5ba0b8 100%);
+            color: white;
+            padding: 18px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #5ba0b8 0%, #6bb0c8 100%);
+        }
+
+        .content-section {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #2c3e50;
+            margin-bottom: 3rem;
+            letter-spacing: 1px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 3rem;
+        }
+
+        .wellness-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            perspective: 1000px;
+            height: 500px;
+        }
+
+        .wellness-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: #f8f9fa;
+        }
+
+        .card-image {
+            height: 200px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: white;
+            z-index: 2;
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-back-content {
+            padding: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card-back-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #2c3e50;
+            text-align: left;
+        }
+
+        .flip-instruction {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .wellness-card:hover .flip-instruction {
+            opacity: 1;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .card-summary {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-tag {
+            display: inline-block;
+            background: #ecf0f1;
+            color: #34495e;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .navigation {
+            background: #2c3e50;
+            padding: 60px 0;
+            text-align: center;
+            color: white;
+        }
+
+        .nav-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .nav-button:hover {
+            background: white;
+            color: #2c3e50;
+        }
+
+        .about-section {
+            background: #f8f9fa;
+            padding: 80px 0;
+        }
+
+        .about-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-text {
+            font-size: 1.2rem;
+            color: #5d6d7e;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .creator-info {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .creator-name {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .creator-description {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Longe Vida</h1>
+            <p class="subtitle">Bem-estar e Longevidade para Mulheres 50+</p>
+            <p class="tagline">Harmonizando corpo, mente e espírito rumo à longevidade saudável</p>
+            <a href="#content" class="cta-button">INICIAR JORNADA</a>
+        </div>
+    </section>
+
+    <section id="content" class="content-section">
+        <div class="container">
+            <h2 class="section-title">Sua Jornada de Bem-estar</h2>
+            <p style="text-align: center; font-size: 1.1rem; color: #7f8c8d; max-width: 600px; margin: 0 auto;">
+                Descubra conteúdos exclusivos para mulheres que buscam se conectar consigo mesmas e viver com mais qualidade aos 50+
+            </p>
+            
+            <div class="cards-grid">
+                <div class="wellness-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/images/wellness/c001.jpg');">
+                                <div class="card-icon">❤️</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Os 5 Pilares do Bem-estar após os 50</h3>
+                                <p class="card-summary">Conheça os elementos fundamentais para uma vida plena e saudável</p>
+                                <div>
+                                    <span class="card-tag">Introdução</span>
+                                    <span class="card-tag">Pilares</span>
+                                    <span class="card-tag">Bem-estar</span>
+                                </div>
+                            </div>
+                            <div class="flip-instruction">Clique para virar</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-back-content">
+                                <h3 class="card-title">Os 5 Pilares do Bem-estar após os 50</h3>
+                                <div class="card-back-text">
+                                    <p><strong>1. Movimento Regular:</strong> Exercícios adaptados que fortalecem músculos e ossos</p>
+                                    <p><strong>2. Nutrição Consciente:</strong> Alimentação rica em nutrientes e adequada às mudanças metabólicas</p>
+                                    <p><strong>3. Sono Reparador:</strong> 7-8 horas de sono de qualidade para regeneração celular</p>
+                                    <p><strong>4. Conexões Sociais:</strong> Manter vínculos afetivos e criar novos relacionamentos</p>
+                                    <p><strong>5. Propósito de Vida:</strong> Encontrar significado e motivação para cada novo dia</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wellness-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/images/wellness/c002.jpg');">
+                                <div class="card-icon">🏊‍♀️</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Exercícios de Baixo Impacto</h3>
+                                <p class="card-summary">Atividades físicas seguras e eficazes para fortalecer o corpo</p>
+                                <div>
+                                    <span class="card-tag">Exercícios</span>
+                                    <span class="card-tag">Baixo Impacto</span>
+                                    <span class="card-tag">Atividade Física</span>
+                                </div>
+                            </div>
+                            <div class="flip-instruction">Clique para virar</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-back-content">
+                                <h3 class="card-title">Exercícios de Baixo Impacto</h3>
+                                <div class="card-back-text">
+                                    <p><strong>Caminhada:</strong> 30 minutos diários, preferencialmente em horários frescos</p>
+                                    <p><strong>Hidroginástica:</strong> Excelente para fortalecer sem sobrecarregar articulações</p>
+                                    <p><strong>Yoga ou Pilates:</strong> Melhora flexibilidade, equilíbrio e força muscular</p>
+                                    <p><strong>Dança:</strong> Combina exercício com diversão e socialização</p>
+                                    <p><strong>Natação:</strong> Trabalha todo o corpo com mínimo impacto</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wellness-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/images/wellness/c003.jpg');">
+                                <div class="card-icon">🥗</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Alimentação Anti-inflamatória</h3>
+                                <p class="card-summary">Alimentos que combatem a inflamação e promovem longevidade</p>
+                                <div>
+                                    <span class="card-tag">Nutrição</span>
+                                    <span class="card-tag">Anti-inflamatório</span>
+                                    <span class="card-tag">Alimentação</span>
+                                </div>
+                            </div>
+                            <div class="flip-instruction">Clique para virar</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-back-content">
+                                <h3 class="card-title">Alimentação Anti-inflamatória</h3>
+                                <div class="card-back-text">
+                                    <p><strong>Incluir diariamente:</strong></p>
+                                    <p>• Peixes ricos em ômega-3 (salmão, sardinha)<br>
+                                    • Vegetais de folhas verdes escuras<br>
+                                    • Frutas vermelhas (morango, mirtilo)<br>
+                                    • Azeite de oliva extra virgem</p>
+                                    <p><strong>Reduzir ou evitar:</strong></p>
+                                    <p>• Açúcar refinado<br>
+                                    • Alimentos ultraprocessados<br>
+                                    • Excesso de carne vermelha</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wellness-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/images/wellness/c004.jpg');">
+                                <div class="card-icon">😴</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Qualidade do Sono após os 50</h3>
+                                <p class="card-summary">Estratégias para melhorar o sono e o descanso reparador</p>
+                                <div>
+                                    <span class="card-tag">Sono</span>
+                                    <span class="card-tag">Descanso</span>
+                                    <span class="card-tag">Rotina Noturna</span>
+                                </div>
+                            </div>
+                            <div class="flip-instruction">Clique para virar</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-back-content">
+                                <h3 class="card-title">Qualidade do Sono após os 50</h3>
+                                <div class="card-back-text">
+                                    <p><strong>Dicas para melhor sono:</strong></p>
+                                    <p>• Mantenha horários regulares para dormir e acordar<br>
+                                    • Crie um ambiente escuro, fresco e silencioso<br>
+                                    • Evite telas 1 hora antes de dormir<br>
+                                    • Pratique relaxamento ou meditação</p>
+                                    <p><strong>Ritual noturno:</strong> Banho morno, chá de camomila, leitura leve e respiração profunda.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wellness-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/images/wellness/c005.jpg');">
+                                <div class="card-icon">👥</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Conexões Sociais e Saúde Mental</h3>
+                                <p class="card-summary">A importância dos relacionamentos para o bem-estar emocional</p>
+                                <div>
+                                    <span class="card-tag">Relacionamentos</span>
+                                    <span class="card-tag">Saúde Mental</span>
+                                    <span class="card-tag">Conexões</span>
+                                </div>
+                            </div>
+                            <div class="flip-instruction">Clique para virar</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-back-content">
+                                <h3 class="card-title">Conexões Sociais e Saúde Mental</h3>
+                                <div class="card-back-text">
+                                    <p><strong>Benefícios comprovados:</strong></p>
+                                    <p>• Reduz risco de depressão<br>
+                                    • Melhora função cognitiva<br>
+                                    • Aumenta longevidade<br>
+                                    • Fortalece sistema imunológico</p>
+                                    <p><strong>Como cultivar:</strong> Participe de grupos, mantenha contato com família, considere voluntariado e explore novas amizades.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wellness-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/images/wellness/c006.jpg');">
+                                <div class="card-icon">🧘‍♀️</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Mindfulness e Meditação</h3>
+                                <p class="card-summary">Práticas de atenção plena para reduzir estresse e ansiedade</p>
+                                <div>
+                                    <span class="card-tag">Mindfulness</span>
+                                    <span class="card-tag">Meditação</span>
+                                    <span class="card-tag">Estresse</span>
+                                </div>
+                            </div>
+                            <div class="flip-instruction">Clique para virar</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-back-content">
+                                <h3 class="card-title">Mindfulness e Meditação</h3>
+                                <div class="card-back-text">
+                                    <p><strong>Benefícios da prática:</strong></p>
+                                    <p>• Reduz cortisol (hormônio do estresse)<br>
+                                    • Melhora regulação emocional<br>
+                                    • Aumenta foco e concentração<br>
+                                    • Promove sensação de bem-estar</p>
+                                    <p><strong>Como começar:</strong> Inicie com 5-10 minutos diários, focando na respiração. Use aplicativos ou vídeos guiados.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="navigation">
+        <div class="container">
+            <h2 class="nav-title">Navegue pelos Conteúdos</h2>
+            <div class="nav-buttons">
+                <a href="#" class="nav-button" onclick="startThematic()">Navegação Temática</a>
+                <a href="#" class="nav-button" onclick="startRandom()">Explorar Aleatoriamente</a>
+                <a href="#" class="nav-button" onclick="showAll()">Ver Todos os Cartões</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <h2 class="section-title">Sobre o Longe Vida</h2>
+                <p class="about-text">
+                    O Longe Vida é uma plataforma dedicada a reunir mulheres de 50+ que buscam se conectar consigo mesmas,
+                    harmonizando corpo, mente e espírito em uma jornada rumo à longevidade saudável e feliz.
+                </p>
+                <div class="creator-info">
+                    <h3 class="creator-name">Ana Contti</h3>
+                    <p class="creator-description">
+                        Reunimos mulheres 50+ que buscam se conectar consigo mesmas harmonizando corpo, mente, espírito, rumo a longevidade saudável
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Card flip interactions
+        function flipCard(cardElement) {
+            const cardInner = cardElement.querySelector('.card-inner');
+            cardInner.classList.toggle('flipped');
+        }
+
+        function startThematic() {
+            alert("Navegação Temática: Explore os conteúdos organizados por temas específicos - Meditação, Exercícios, Postura, Independência e Qualidade de Vida. Cada tema oferece uma jornada estruturada de aprendizado.");
+        }
+
+        function startRandom() {
+            alert("Exploração Aleatória: Deixe-se surpreender! Navegue pelos conteúdos de forma espontânea e descubra dicas valiosas de bem-estar de maneira divertida e inesperada.");
+        }
+
+        function showAll() {
+            alert("Todos os Cartões: Visualize todos os conteúdos disponíveis em uma única tela. Perfeito para ter uma visão geral completa dos temas de bem-estar disponíveis.");
+        }
+
+        // Add scroll animations
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.wellness-card');
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const cardVisible = cardTop < window.innerHeight - 100;
+                
+                if (cardVisible) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Initialize card animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.wellness-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

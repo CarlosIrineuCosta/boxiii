@@ -1,0 +1,282 @@
+[
+  {
+    "card_id": "anacontti50mais_dc55d49d_wellness_20250602_2102_card_001",
+    "card_number": "c001",
+    "set_id": "anacontti50mais_dc55d49d_wellness_20250602_2102",
+    "creator_id": "ana_contti",
+    "title": "Como começar a meditar depois dos 50?",
+    "summary": "Não precisa ser perfeita, só precisa começar com pequenos momentos.",
+    "detailed_content": "Comece com apenas 5 minutos por dia, escolha um horário fixo e um cantinho especial da casa. Não se preocupe em esvaziar a mente completamente - é normal os pensamentos aparecerem. O importante é criar esse espaço sagrado para você, um momento de reconexão com sua essência e de cultivo da paz interior.",
+    "order_index": 1,
+    "navigation_contexts": {
+      "thematic": {"position": 1, "total_items": 10, "context_data": {"theme": "Bem-estar 50+"}}
+    },
+    "media": [
+      {
+        "media_type": "image",
+        "url": "./images/sets/s002/cards/c001.jpg",
+        "alt_text": "Mulher madura sentada em posição de meditação em ambiente sereno com plantas",
+        "source": "Ana Contti",
+        "license": "Educational Use",
+        "validation_status": "verified",
+        "last_checked": "2025-06-04T00:00:00Z"
+      }
+    ],
+    "domain_data": {"related_concepts": ["mindfulness", "autocuidado", "equilíbrio emocional"]},
+    "tags": ["bem-estar", "saude", "meditacao", "mindfulness", "autocuidado"],
+    "created_at": "2025-06-04T10:00:00Z",
+    "updated_at": "2025-06-04T10:00:00Z"
+  },
+  {
+    "card_id": "anacontti50mais_dc55d49d_wellness_20250602_2102_card_002",
+    "card_number": "c002",
+    "set_id": "anacontti50mais_dc55d49d_wellness_20250602_2102",
+    "creator_id": "ana_contti",
+    "title": "Por que treinar a capacidade de sentar e levantar do chão é fundamental?",
+    "summary": "Esse movimento simples é um indicador poderoso da sua independência futura.",
+    "detailed_content": "A capacidade de sentar e levantar do chão sem apoio das mãos é um dos melhores preditores de longevidade e qualidade de vida. Pratique diariamente: sente no chão de diferentes formas e levante usando apenas as pernas. Comece apoiando em uma cadeira se necessário e vá progredindo gradualmente - seu corpo agradecerá nos anos vindouros.",
+    "order_index": 2,
+    "navigation_contexts": {
+      "thematic": {"position": 2, "total_items": 10, "context_data": {"theme": "Bem-estar 50+"}}
+    },
+    "media": [
+      {
+        "media_type": "image",
+        "url": "./images/sets/s002/cards/c002.jpg",
+        "alt_text": "Mulher madura demonstrando exercício de sentar e levantar do chão com elegância",
+        "source": "Ana Contti",
+        "license": "Educational Use",
+        "validation_status": "verified",
+        "last_checked": "2025-06-04T00:00:00Z"
+      }
+    ],
+    "domain_data": {"related_concepts": ["mobilidade", "independência funcional", "longevidade"]},
+    "tags": ["bem-estar", "saude", "exercicio", "mobilidade", "independencia"],
+    "created_at": "2025-06-04T10:00:00Z",
+    "updated_at": "2025-06-04T10:00:00Z"
+  },
+  {
+    "card_id": "anacontti50mais_dc55d49d_wellness_20250602_2102_card_003",
+    "card_number": "c003",
+    "set_id": "anacontti50mais_dc55d49d_wellness_20250602_2102",
+    "creator_id": "ana_contti",
+    "title": "Como fortalecer os braços para o dia a dia depois dos 50?",
+    "summary": "Braços fortes garantem independência nas tarefas cotidianas e autoestima.",
+    "detailed_content": "Inclua exercícios de fortalecimento 3 vezes por semana: flexões na parede, elevação de braços com garrafas d'água como peso, ou exercícios com elásticos. Braços firmes não são só estética - significam carregar compras, segurar netos no colo e abrir potes sem dificuldade. Comece devagar e seja consistente, os resultados virão gradualmente.",
+    "order_index": 3,
+    "navigation_contexts": {
+      "thematic": {"position": 3, "total_items": 10, "context_data": {"theme": "Bem-estar 50+"}}
+    },
+    "media": [
+      {
+        "media_type": "image",
+        "url": "./images/sets/s002/cards/c003.jpg",
+        "alt_text": "Mulher madura realizando exercícios de fortalecimento dos braços com alegria",
+        "source": "Ana Contti",
+        "license": "Educational Use",
+        "validation_status": "verified",
+        "last_checked": "2025-06-04T00:00:00Z"
+      }
+    ],
+    "domain_data": {"related_concepts": ["força muscular", "independência funcional", "autoestima"]},
+    "tags": ["bem-estar", "saude", "exercicio", "forca", "membros-superiores"],
+    "created_at": "2025-06-04T10:00:00Z",
+    "updated_at": "2025-06-04T10:00:00Z"
+  },
+  {
+    "card_id": "anacontti50mais_dc55d49d_wellness_20250602_2102_card_004",
+    "card_number": "c004",
+    "set_id": "anacontti50mais_dc55d49d_wellness_20250602_2102",
+    "creator_id": "ana_contti",
+    "title": "Qual o segredo de uma alimentação equilibrada após os 50?",
+    "summary": "Qualidade sobre quantidade, e muito carinho na preparação.",
+    "detailed_content": "Priorize alimentos integrais, proteínas magras e vegetais coloridos a cada refeição. Cozinhe com amor, mastigue devagar e ouça seu corpo - ele sabe o que precisa. Hidrate-se bem ao longo do dia e não se esqueça: uma alimentação saudável é um ato de amor próprio, não uma punição.",
+    "order_index": 4,
+    "navigation_contexts": {
+      "thematic": {"position": 4, "total_items": 10, "context_data": {"theme": "Bem-estar 50+"}}
+    },
+    "media": [
+      {
+        "media_type": "image",
+        "url": "./images/sets/s002/cards/c004.jpg",
+        "alt_text": "Mesa colorida com alimentos saudáveis preparados com carinho por mulher madura",
+        "source": "Ana Contti",
+        "license": "Educational Use",
+        "validation_status": "verified",
+        "last_checked": "2025-06-04T00:00:00Z"
+      }
+    ],
+    "domain_data": {"related_concepts": ["nutrição consciente", "alimentação intuitiva", "autocuidado"]},
+    "tags": ["bem-estar", "saude", "nutricao", "alimentacao", "amor-proprio"],
+    "created_at": "2025-06-04T10:00:00Z",
+    "updated_at": "2025-06-04T10:00:00Z"
+  },
+  {
+    "card_id": "anacontti50mais_dc55d49d_wellness_20250602_2102_card_005",
+    "card_number": "c005",
+    "set_id": "anacontti50mais_dc55d49d_wellness_20250602_2102",
+    "creator_id": "ana_contti",
+    "title": "Como cuidar da saúde emocional na maturidade?",
+    "summary": "Seus sentimentos são válidos e merecem atenção carinhosa.",
+    "detailed_content": "Reserve tempo diário para check-ins emocionais: como você está se sentindo? Pratique a autocompaixão, especialmente nos dias difíceis. Busque atividades que tragam alegria genuína e não hesite em procurar ajuda profissional quando necessário - cuidar da mente é tão importante quanto cuidar do corpo.",
+    "order_index": 5,
+    "navigation_contexts": {
+      "thematic": {"position": 5, "total_items": 10, "context_data": {"theme": "Bem-estar 50+"}}
+    },
+    "media": [
+      {
+        "media_type": "image",
+        "url": "./images/sets/s002/cards/c005.jpg",
+        "alt_text": "Mulher madura em momento de reflexão tranquila, demonstrando bem-estar emocional",
+        "source": "Ana Contti",
+        "license": "Educational Use",
+        "validation_status": "verified",
+        "last_checked": "2025-06-04T00:00:00Z"
+      }
+    ],
+    "domain_data": {"related_concepts": ["inteligência emocional", "autocompaixão", "saúde mental"]},
+    "tags": ["bem-estar", "saude", "emocional", "autocompaixao", "saude-mental"],
+    "created_at": "2025-06-04T10:00:00Z",
+    "updated_at": "2025-06-04T10:00:00Z"
+  },
+  {
+    "card_id": "anacontti50mais_dc55d49d_wellness_20250602_2102_card_006",
+    "card_number": "c006",
+    "set_id": "anacontti50mais_dc55d49d_wellness_20250602_2102",
+    "creator_id": "ana_contti",
+    "title": "Como manter conexões sociais significativas após os 50?",
+    "summary": "Relacionamentos de qualidade são medicina para a alma e o corpo.",
+    "detailed_content": "Invista em relacionamentos que nutrem sua alma - qualidade supera quantidade. Participe de grupos com interesses similares, seja voluntária em causas que acredita, mantenha contato regular com amigos queridos. Lembre-se: você também tem muito a oferecer! Suas experiências e sabedoria são presentes valiosos para quem convive com você.",
+    "order_index": 6,
+    "navigation_contexts": {
+      "thematic": {"position": 6, "total_items": 10, "context_data": {"theme": "Bem-estar 50+"}}
+    },
+    "media": [
+      {
+        "media_type": "image",
+        "url": "./images/sets/s002/cards/c006.jpg",
+        "alt_text": "Grupo de mulheres maduras conversando e rindo juntas em ambiente acolhedor",
+        "source": "Ana Contti",
+        "license": "Educational Use",
+        "validation_status": "verified",
+        "last_checked": "2025-06-04T00:00:00Z"
+      }
+    ],
+    "domain_data": {"related_concepts": ["conexões sociais", "suporte social", "envelhecimento ativo"]},
+    "tags": ["bem-estar", "saude", "relacionamentos", "conexoes-sociais", "comunidade"],
+    "created_at": "2025-06-04T10:00:00Z",
+    "updated_at": "2025-06-04T10:00:00Z"
+  },
+  {
+    "card_id": "anacontti50mais_dc55d49d_wellness_20250602_2102_card_007",
+    "card_number": "c007",
+    "set_id": "anacontti50mais_dc55d49d_wellness_20250602_2102",
+    "creator_id": "ana_contti",
+    "title": "Qual a importância do sono reparador na maturidade?",
+    "summary": "Uma boa noite de sono é o alicerce de todos os outros cuidados.",
+    "detailed_content": "Crie um ritual de relaxamento antes de dormir: desligue eletrônicos 1 hora antes, tome um chá calmante, leia algo prazeroso. Mantenha o quarto fresco, escuro e silencioso. Sono de qualidade não é luxo - é necessidade básica para regeneração celular, consolidação da memória e equilíbrio hormonal.",
+    "order_index": 7,
+    "navigation_contexts": {
+      "thematic": {"position": 7, "total_items": 10, "context_data": {"theme": "Bem-estar 50+"}}
+    },
+    "media": [
+      {
+        "media_type": "image",
+        "url": "./images/sets/s002/cards/c007.jpg",
+        "alt_text": "Quarto sereno preparado para uma noite de sono reparador com elementos relaxantes",
+        "source": "Ana Contti",
+        "license": "Educational Use",
+        "validation_status": "verified",
+        "last_checked": "2025-06-04T00:00:00Z"
+      }
+    ],
+    "domain_data": {"related_concepts": ["higiene do sono", "regeneração celular", "ritmo circadiano"]},
+    "tags": ["bem-estar", "saude", "sono", "descanso", "regeneracao"],
+    "created_at": "2025-06-04T10:00:00Z",
+    "updated_at": "2025-06-04T10:00:00Z"
+  },
+  {
+    "card_id": "anacontti50mais_dc55d49d_wellness_20250602_2102_card_008",
+    "card_number": "c008",
+    "set_id": "anacontti50mais_dc55d49d_wellness_20250602_2102",
+    "creator_id": "ana_contti",
+    "title": "Como redescobrir sua essência e propósito após os 50?",
+    "summary": "Esta fase da vida é um convite para se reconectar com quem você realmente é.",
+    "detailed_content": "Reserve tempo para atividades que fazem seu coração cantar - pode ser pintura, jardinagem, escrita ou dança. Reflita sobre seus valores e o que realmente importa para você agora. A maturidade traz a liberdade de escolher conscientemente como quer viver, sem as pressões sociais da juventude. Permita-se sonhar novos sonhos!",
+    "order_index": 8,
+    "navigation_contexts": {
+      "thematic": {"position": 8, "total_items": 10, "context_data": {"theme": "Bem-estar 50+"}}
+    },
+    "media": [
+      {
+        "media_type": "image",
+        "url": "./images/sets/s002/cards/c008.jpg",
+        "alt_text": "Mulher madura em atividade criativa, demonstrando alegria e autenticidade",
+        "source": "Ana Contti",
+        "license": "Educational Use",
+        "validation_status": "verified",
+        "last_checked": "2025-06-04T00:00:00Z"
+      }
+    ],
+    "domain_data": {"related_concepts": ["autenticidade", "realização pessoal", "reinvenção"]},
+    "tags": ["bem-estar", "saude", "proposito", "autenticidade", "realizacao"],
+    "created_at": "2025-06-04T10:00:00Z",
+    "updated_at": "2025-06-04T10:00:00Z"
+  },
+  {
+    "card_id": "anacontti50mais_dc55d49d_wellness_20250602_2102_card_009",
+    "card_number": "c009",
+    "set_id": "anacontti50mais_dc55d49d_wellness_20250602_2102",
+    "creator_id": "ana_contti",
+    "title": "Como estabelecer limites saudáveis na maturidade?",
+    "summary": "Dizer 'não' é um ato de amor próprio e respeito ao seu tempo.",
+    "detailed_content": "Aprenda a diferenciar entre ajudar por amor e ajudar por obrigação. Seu tempo e energia são recursos preciosos - invista-os conscientemente. Pratique frases como 'vou pensar e te respondo' antes de assumir novos compromissos. Lembre-se: cuidar de você primeiro não é egoísmo, é necessidade para poder cuidar bem dos outros.",
+    "order_index": 9,
+    "navigation_contexts": {
+      "thematic": {"position": 9, "total_items": 10, "context_data": {"theme": "Bem-estar 50+"}}
+    },
+    "media": [
+      {
+        "media_type": "image",
+        "url": "./images/sets/s002/cards/c009.jpg",
+        "alt_text": "Mulher madura demonstrando serenidade e assertividade em conversa respeitosa",
+        "source": "Ana Contti",
+        "license": "Educational Use",
+        "validation_status": "verified",
+        "last_checked": "2025-06-04T00:00:00Z"
+      }
+    ],
+    "domain_data": {"related_concepts": ["assertividade", "autocuidado", "limites pessoais"]},
+    "tags": ["bem-estar", "saude", "limites", "assertividade", "autocuidado"],
+    "created_at": "2025-06-04T10:00:00Z",
+    "updated_at": "2025-06-04T10:00:00Z"
+  },
+  {
+    "card_id": "anacontti50mais_dc55d49d_wellness_20250602_2102_card_010",
+    "card_number": "c010",
+    "set_id": "anacontti50mais_dc55d49d_wellness_20250602_2102",
+    "creator_id": "ana_contti",
+    "title": "Como celebrar e abraçar as mudanças do corpo na maturidade?",
+    "summary": "Cada marca do tempo conta uma história de vida vivida com intensidade.",
+    "detailed_content": "Pratique a gratidão pelo que seu corpo fez e ainda faz por você - gerou filhos, trabalhou, dançou, amou. Invista em roupas que realcem sua beleza atual, não a de 20 anos atrás. Cuide da postura, mantenha-se ativa e lembre-se: a verdadeira beleza vem da confiança, do sorriso genuíno e da energia positiva que você irradia.",
+    "order_index": 10,
+    "navigation_contexts": {
+      "thematic": {"position": 10, "total_items": 10, "context_data": {"theme": "Bem-estar 50+"}}
+    },
+    "media": [
+      {
+        "media_type": "image",
+        "url": "./images/sets/s002/cards/c010.jpg",
+        "alt_text": "Mulher madura olhando-se no espelho com carinho e aceitação, irradiando autoestima",
+        "source": "Ana Contti",
+        "license": "Educational Use",
+        "validation_status": "verified",
+        "last_checked": "2025-06-04T00:00:00Z"
+      }
+    ],
+    "domain_data": {"related_concepts": ["aceitação corporal", "autoestima", "envelhecimento positivo"]},
+    "tags": ["bem-estar", "saude", "autoaceitacao", "autoestima", "beleza-madura"],
+    "created_at": "2025-06-04T10:00:00Z",
+    "updated_at": "2025-06-04T10:00:00Z"
+  }
+]

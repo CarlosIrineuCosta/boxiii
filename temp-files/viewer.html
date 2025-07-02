@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boxiii Viewer</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background-color: #1a1a1a; 
+            color: white; 
+            margin: 0;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #3b82f6;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .box { 
+            border: 1px solid #333; 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 8px; 
+            background-color: #2a2a2a; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .box h3 {
+            color: #60a5fa;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .box p {
+            margin: 8px 0;
+            color: #d1d5db;
+        }
+        .cards-count {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        .error { 
+            color: #ef4444; 
+            background-color: #7f1d1d;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .success { 
+            color: #22c55e; 
+            font-weight: bold;
+        }
+        #status { 
+            margin: 20px 0; 
+            font-size: 18px; 
+            text-align: center;
+        }
+        .loading {
+            text-align: center;
+            font-style: italic;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Boxiii Content Viewer</h1>
+    <div id="status" class="loading">Loading your boxes...</div>
+    <div id="content"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Boxiii Viewer: JavaScript loaded');
+            loadBoxes();
+        });
+        
+        async function loadBoxes() {
+            const statusDiv = document.getElementById('status');
+            const contentDiv = document.getElementById('content');
+            
+            try {
+                console.log('Fetching boxes from API...');
+                
+                // Try to fetch from your actual API
+                const response = await fetch('/api/sets');
+                
+                if (!response.ok) {
+                    throw new Error(`API responded with status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('API response:', data);
+                
+                // Handle both direct array and {data: array} formats
+                const boxes = Array.isArray(data) ? data : data.data || [];
+                
+                if (boxes.length === 0) {
+                    statusDiv.innerHTML = '<span class="error">No boxes found in your database</span>';
+                    return;
+                }
+                
+                statusDiv.innerHTML = `<span class="success">✅ Found ${boxes.length} boxes in your database!</span>`;
+                
+                contentDiv.innerHTML = boxes.map(function(box) {
+                    return '<div class="box">' +
+                        '<h3>' + (box.title || 'Untitled Box') + '</h3>' +
+                        '<p>' + (box.description || 'No description available') + '</p>' +
+                        '<p class="cards-count">Cards: ' + (box.card_count || 0) + '</p>' +
+                        '<p><strong>Category:</strong> ' + (box.category || 'General') + '</p>' +
+                        '<p><strong>Language:</strong> ' + (box.language || 'Not specified') + '</p>' +
+                        '</div>';
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error loading boxes:', error);
+                statusDiv.innerHTML = '<div class="error">❌ Error connecting to API: ' + error.message + '</div>';
+                
+                // Show test data as fallback
+                contentDiv.innerHTML = '<div class="box">' +
+                    '<h3>Connection Test</h3>' +
+                    '<p>Could not connect to your Boxiii API. This could mean:</p>' +
+                    '<p>• The API server is not running</p>' +
+                    '<p>• Docker containers are stopped</p>' +
+                    '<p>• Network configuration issue</p>' +
+                    '</div>';
+            }
+        }
+    </script>
+</body>
+</html>

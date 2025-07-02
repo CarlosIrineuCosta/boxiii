@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boxiii Trivia Cards</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a2332;
+            --card-bg: #ffffff;
+            --card-shadow: rgba(0, 0, 0, 0.25);
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --accent-primary: #667eea;
+            --accent-secondary: #764ba2;
+            --border-color: #e2e8f0;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #f56565;
+            --gold: #f6e05e;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(26, 35, 50, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "🎯";
+            font-size: 1.25rem;
+        }
+
+        .card-counter {
+            color: var(--gold);
+            font-weight: 500;
+            font-size: 0.9rem;
+            background: rgba(246, 224, 94, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            border: 1px solid rgba(246, 224, 94, 0.2);
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 1rem;
+            color: white;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            perspective: 1000px;
+        }
+
+        /* Card Container */
+        .card-container {
+            position: relative;
+            width: 450px;
+            height: 300px;
+            max-width: 90vw;
+            max-height: 60vh;
+        }
+
+        .card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px var(--card-shadow);
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 35px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: white;
+        }
+
+        .card-front {
+            background: var(--card-bg);
+            position: relative;
+        }
+
+        .card-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .card-type {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-type::before {
+            content: "❓";
+            font-size: 1rem;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .card-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .flip-indicator {
+            font-size: 0.8rem;
+            color: var(--accent-primary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .flip-indicator::after {
+            content: "↻";
+            font-size: 1rem;
+        }
+
+        /* Back face styling */
+        .card-back .card-type {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .card-back .card-type::before {
+            content: "💡";
+        }
+
+        .card-back .card-title {
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .card-back .card-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card-back .card-hint {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card-back .flip-indicator {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-back .flip-indicator::after {
+            content: "↺";
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 50;
+        }
+
+        .nav-button {
+            background: rgba(26, 35, 50, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-button:hover {
+            background: rgba(102, 126, 234, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-button:active {
+            transform: translateY(0);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .nav-button:disabled:hover {
+            background: rgba(26, 35, 50, 0.9);
+            transform: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Instructions */
+        .instructions {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            background: rgba(26, 35, 50, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            color: white;
+            font-size: 0.8rem;
+            max-width: 200px;
+            z-index: 50;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .instructions h3 {
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            color: var(--gold);
+        }
+
+        .instructions ul {
+            list-style: none;
+            gap: 0.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .instructions li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .instructions kbd {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Error State */
+        .error {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 1rem;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            color: var(--danger);
+        }
+
+        .error-message {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-details {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .retry-button {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .retry-button:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .card-container {
+                width: 350px;
+                height: 250px;
+            }
+
+            .card-face {
+                padding: 1.5rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .instructions {
+                display: none;
+            }
+
+            .navigation {
+                flex-wrap: wrap;
+                justify-content: center;
+                max-width: 90vw;
+            }
+
+            .nav-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-container {
+                width: 300px;
+                height: 220px;
+            }
+
+            .card-face {
+                padding: 1.25rem;
+            }
+
+            .card-title {
+                font-size: 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">Boxiii Trivia</a>
+            <div class="card-counter" id="cardCounter">Loading...</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading your trivia cards...</p>
+        </div>
+
+        <!-- Card Container -->
+        <div class="card-container" id="cardContainer" style="display: none;">
+            <div class="card" id="triviaCard">
+                <div class="card-face card-front">
+                    <div class="card-type">Question</div>
+                    <div class="card-title" id="cardQuestion">Loading question...</div>
+                    <div class="card-footer">
+                        <div class="card-hint" id="cardHint">Click to reveal answer</div>
+                        <div class="flip-indicator">Flip</div>
+                    </div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="card-type">Answer</div>
+                    <div class="card-title" id="cardAnswer">Loading answer...</div>
+                    <div class="card-footer">
+                        <div class="card-hint">Click to see question</div>
+                        <div class="flip-indicator">Flip</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error" id="errorState" style="display: none;">
+            <div class="error-icon">⚠️</div>
+            <div class="error-message">Unable to load trivia cards</div>
+            <div class="error-details" id="errorDetails">Please check your connection and try again.</div>
+            <button class="retry-button" onclick="loadTriviaData()">Retry</button>
+        </div>
+    </main>
+
+    <!-- Navigation -->
+    <nav class="navigation" id="navigation" style="display: none;">
+        <button class="nav-button" id="prevButton" onclick="previousCard()">
+            ← Previous
+        </button>
+        <button class="nav-button" id="nextButton" onclick="nextCard()">
+            Next →
+        </button>
+        <button class="nav-button" onclick="exitTrivia()">
+            ESC Exit
+        </button>
+    </nav>
+
+    <!-- Instructions -->
+    <div class="instructions">
+        <h3>Controls</h3>
+        <ul>
+            <li><kbd>Space</kbd> Flip card</li>
+            <li><kbd>←</kbd> Previous</li>
+            <li><kbd>→</kbd> Next</li>
+            <li><kbd>ESC</kbd> Exit</li>
+        </ul>
+    </div>
+
+    <script>
+        // Global state
+        let triviaCards = [];
+        let currentCardIndex = 0;
+        let isFlipped = false;
+
+        // API Configuration - Update this to your VPS domain
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5001/api'
+            : '/api';
+
+        // DOM Elements
+        const elements = {
+            loadingState: document.getElementById('loadingState'),
+            cardContainer: document.getElementById('cardContainer'),
+            errorState: document.getElementById('errorState'),
+            navigation: document.getElementById('navigation'),
+            cardCounter: document.getElementById('cardCounter'),
+            triviaCard: document.getElementById('triviaCard'),
+            cardQuestion: document.getElementById('cardQuestion'),
+            cardAnswer: document.getElementById('cardAnswer'),
+            cardHint: document.getElementById('cardHint'),
+            errorDetails: document.getElementById('errorDetails'),
+            prevButton: document.getElementById('prevButton'),
+            nextButton: document.getElementById('nextButton')
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTriviaData();
+            setupEventListeners();
+        });
+
+        // Load trivia data from API
+        async function loadTriviaData() {
+            showState('loading');
+            
+            try {
+                // Fetch cards from the API
+                const response = await fetch(`${API_BASE_URL}/cards`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                triviaCards = data.data || [];
+                
+                if (triviaCards.length === 0) {
+                    throw new Error('No trivia cards found. Please create some cards first.');
+                }
+                
+                // Process cards to ensure they have the right format
+                triviaCards = triviaCards.map(card => ({
+                    id: card.card_id,
+                    question: card.title || 'No question available',
+                    answer: card.detailed_content || card.summary || 'No answer available',
+                    hint: card.summary || 'Think carefully...',
+                    category: card.tags?.[0] || 'General',
+                    creator: card.creator_name || 'Unknown'
+                }));
+                
+                currentCardIndex = 0;
+                isFlipped = false;
+                updateCardDisplay();
+                showState('card');
+                
+            } catch (error) {
+                console.error('Error loading trivia data:', error);
+                elements.errorDetails.textContent = error.message;
+                showState('error');
+            }
+        }
+
+        // Show different states
+        function showState(state) {
+            elements.loadingState.style.display = state === 'loading' ? 'flex' : 'none';
+            elements.cardContainer.style.display = state === 'card' ? 'block' : 'none';
+            elements.errorState.style.display = state === 'error' ? 'flex' : 'none';
+            elements.navigation.style.display = state === 'card' ? 'flex' : 'none';
+        }
+
+        // Update card display
+        function updateCardDisplay() {
+            if (triviaCards.length === 0) return;
+            
+            const card = triviaCards[currentCardIndex];
+            
+            // Update content
+            elements.cardQuestion.textContent = card.question;
+            elements.cardAnswer.textContent = card.answer;
+            elements.cardHint.textContent = card.hint;
+            
+            // Update counter
+            elements.cardCounter.textContent = `Card ${currentCardIndex + 1} of ${triviaCards.length}`;
+            
+            // Update navigation buttons
+            elements.prevButton.disabled = currentCardIndex === 0;
+            elements.nextButton.disabled = currentCardIndex === triviaCards.length - 1;
+            
+            // Reset flip state
+            isFlipped = false;
+            elements.triviaCard.classList.remove('flipped');
+        }
+
+        // Flip card
+        function flipCard() {
+            isFlipped = !isFlipped;
+            elements.triviaCard.classList.toggle('flipped', isFlipped);
+        }
+
+        // Navigation functions
+        function previousCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                updateCardDisplay();
+            }
+        }
+
+        function nextCard() {
+            if (currentCardIndex < triviaCards.length - 1) {
+                currentCardIndex++;
+                updateCardDisplay();
+            }
+        }
+
+        function exitTrivia() {
+            if (confirm('Are you sure you want to exit the trivia?')) {
+                window.location.href = '/';
+            }
+        }
+
+        // Event listeners
+        function setupEventListeners() {
+            // Card click to flip
+            elements.triviaCard.addEventListener('click', flipCard);
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                switch(e.key) {
+                    case ' ':
+                    case 'Space':
+                        e.preventDefault();
+                        flipCard();
+                        break;
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        previousCard();
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        nextCard();
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        exitTrivia();
+                        break;
+                }
+            });
+            
+            // Touch/swipe support for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            elements.triviaCard.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            elements.triviaCard.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const swipeDistance = touchStartX - touchEndX;
+                
+                if (Math.abs(swipeDistance) > swipeThreshold) {
+                    if (swipeDistance > 0) {
+                        // Swipe left - next card
+                        nextCard();
+                    } else {
+                        // Swipe right - previous card
+                        previousCard();
+                    }
+                }
+            }
+        }
+
+        // Prevent context menu on card (mobile)
+        elements.triviaCard.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Auto-refresh data every 5 minutes
+        setInterval(loadTriviaData, 5 * 60 * 1000);
+    </script>
+</body>
+</html>

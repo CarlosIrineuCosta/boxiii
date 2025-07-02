@@ -1,0 +1,33 @@
+{
+  "topics": [
+    {
+      "title": "Zen",
+      "cards": [
+        {
+          "question": "What is a koan?",
+          "answer": "A paradoxical anecdote or riddle used in Zen practice to provoke enlightenment through the abandonment of logical reasoning."
+        },
+        {
+          "question": "What does 'satori' mean?",
+          "answer": "A Japanese Buddhist term for awakening, comprehension, or understanding - the experience of enlightenment in Zen practice."
+        },
+        {
+          "question": "Who was Bodhidharma?",
+          "answer": "A Buddhist monk who lived during the 5th or 6th century and is traditionally credited as the transmitter of Chan Buddhism to China."
+        },
+        {
+          "question": "What is zazen?",
+          "answer": "A meditative discipline that is typically the primary practice of the Zen Buddhist tradition, often translated as 'seated meditation'."
+        },
+        {
+          "question": "What is the meaning of 'emptiness' in Zen?",
+          "answer": "Not a void, but the absence of inherent existence - all phenomena arise through interdependence rather than existing independently."
+        },
+        {
+          "question": "What is mindfulness in Zen practice?",
+          "answer": "The practice of purposeful, non-judgmental awareness of the present moment, observing thoughts and sensations without attachment."
+        }
+      ]
+    }
+  ]
+}
