@@ -4,7 +4,7 @@ import type { Box, Card, Creator } from './db';
 
 // Use static JSON files by default, can override with env var for API mode
 const USE_API = import.meta.env.VITE_USE_API === 'true';
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 const JSON_BASE_URL = '/data';
 
 // Network status helper
