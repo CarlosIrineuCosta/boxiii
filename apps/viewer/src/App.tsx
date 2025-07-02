@@ -32,10 +32,10 @@ function App() {
   }, []);
 
   return (
-    <div className={`min-h-screen bg-slate-900 text-white ${isPWA ? 'safe-area-inset' : ''}`}>
+    <div className={`min-h-screen bg-gray-900 text-white ${isPWA ? 'safe-area-inset' : ''}`}>
       {/* Offline indicator */}
       {!isOnline && (
-        <div className="bg-yellow-600 text-black text-center py-2 text-sm">
+        <div className="bg-yellow-500 text-black text-center py-2 text-sm">
           You're offline - showing downloaded content
         </div>
       )}
